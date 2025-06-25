@@ -18,6 +18,7 @@ export default function RootLayout({
         <link href="https://fonts.cdnfonts.com/css/titania" rel="stylesheet" />
       </head>
       <body>
+        <div id="star-container"></div>
         {children}
         <ShootingStars />
       </body>
