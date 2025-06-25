@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function Home() {
     if (el) {
       const text = el.dataset.text || "ReDelicious";
       el.innerHTML = '';
-      for (let char of text) {
+      for (const char of text) {
         const span = document.createElement('span');
         span.textContent = char === ' ' ? '\u00A0' : char;
         el.appendChild(span);
@@ -46,26 +48,26 @@ export default function Home() {
 
   return (
     <>
-      <img src="/logos/lilshrooms.svg" alt="Shroom left" className="margin-shroom left-shroom" />
-      <img src="/logos/lilshrooms.svg" alt="Shroom right" className="margin-shroom right-shroom" />
+      <Image src="/logos/lilshrooms.svg" alt="Shroom left" className="margin-shroom left-shroom" width={50} height={50} />
+      <Image src="/logos/lilshrooms.svg" alt="Shroom right" className="margin-shroom right-shroom" width={50} height={50} />
       <div id="star-container"></div>
       <header>
         <div className="header-top">
-          <img src="/logos/ReDLogo6-25.svg" alt="ReDelicious logo" className="logo" />
+          <Image src="/logos/ReDLogo6-25.svg" alt="ReDelicious logo" className="logo" width={100} height={100} />
           <div className="header-title">
             <h1 className="wiggle-title" id="wiggle-header" data-text="ReDelicious"></h1>
-            <h3>DC's Food Lab Co-op</h3>
+            <h3>DC&apos;s Food Lab Co-op</h3>
           </div>
         </div>
         <nav>
-          <a href="/">Home</a>
-          <a href="/about">About Us</a>
-          <a href="/calendar">Events</a>
-          <a href="/interest">Get Involved</a>
-          <a href="/members">Members</a>
-          <a href="/faq">FAQ</a>
-          <a href="/community">Resources</a>
-          <a href="/shop">Shop</a>
+          <Link href="/">Home</Link>
+          <Link href="/about">About Us</Link>
+          <Link href="/calendar">Events</Link>
+          <Link href="/interest">Get Involved</Link>
+          <Link href="/members">Members</Link>
+          <Link href="/faq">FAQ</Link>
+          <Link href="/community">Resources</Link>
+          <Link href="/shop">Shop</Link>
         </nav>
       </header>
       <main>
