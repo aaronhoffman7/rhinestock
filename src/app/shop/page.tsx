@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import MarginShrooms from "../components/MarginShrooms";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Shop() {
   useEffect(() => {
@@ -21,25 +23,8 @@ export default function Shop() {
 
   return (
     <>
-      <Image src="/logos/lilshrooms.svg" alt="Shroom left" className="margin-shroom left-shroom" width={50} height={50} />
-      <Image src="/logos/lilshrooms.svg" alt="Shroom right" className="margin-shroom right-shroom" width={50} height={50} />
-      <div id="star-container"></div>
-      <header>
-        <div className="header-top">
-          <Image src="/logos/ReDLogo6-25.svg" alt="ReDelicious logo" className="logo" width={100} height={100} />
-          <h1 className="wiggle-title" id="wiggle-header" data-text="Shop"></h1>
-        </div>
-        <nav>
-          <Link href="/">Home</Link>
-          <Link href="/about">About Us</Link>
-          <Link href="/calendar">Events</Link>
-          <Link href="/interest">Get Involved</Link>
-          <Link href="/members">Members</Link>
-          <Link href="/faq">FAQ</Link>
-          <Link href="/community">Resources</Link>
-          <Link href="/shop">Shop</Link>
-        </nav>
-      </header>
+      <MarginShrooms />
+      <Header title="Shop" />
       <main>
         <h2>merch, goodies, etc.</h2>
         <p>Under construction- more coming soon!</p>
@@ -67,9 +52,7 @@ export default function Shop() {
           </div>
         </div>
       </main>
-      <footer>
-        <p>© 2025 ReDelicious Co-op</p>
-      </footer>
+      <Footer />
     </>
   );
-} 
+}
