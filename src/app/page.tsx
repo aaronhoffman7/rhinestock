@@ -15,6 +15,7 @@ export default function Home() {
       "delicious",
       "community"
     ];
+    const timeouts: NodeJS.Timeout[] = [];
     let currentPhrase = 0;
     const taglineEl = document.getElementById("tagline");
     function showNextPhrase() {
@@ -24,14 +25,17 @@ export default function Home() {
       phraseSpan.style.opacity = "0";
       phraseSpan.style.transition = "opacity 0.8s ease";
       taglineEl.appendChild(phraseSpan);
-      setTimeout(() => {
-        phraseSpan.style.opacity = "1";
-      }, 50);
+      timeouts.push(
+        setTimeout(() => {
+          phraseSpan.style.opacity = "1";
+        }, 50)
+      );
       currentPhrase++;
       if (currentPhrase < phrases.length) {
-        setTimeout(showNextPhrase, 780);
+        timeouts.push(setTimeout(showNextPhrase, 780));
       }
     }
+    taglineEl && (taglineEl.innerHTML = "");
     showNextPhrase();
     // Wiggle title
     const el = document.getElementById("wiggle-header");
@@ -44,6 +48,10 @@ export default function Home() {
         el.appendChild(span);
       }
     }
+    return () => {
+      timeouts.forEach(clearTimeout);
+      taglineEl && (taglineEl.innerHTML = "");
+    };
   }, []);
 
   return (
