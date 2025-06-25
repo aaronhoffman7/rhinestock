@@ -35,7 +35,9 @@ export default function Home() {
         timeouts.push(setTimeout(showNextPhrase, 780));
       }
     }
-    taglineEl && (taglineEl.innerHTML = "");
+    if (taglineEl) {
+      taglineEl.innerHTML = "";
+    }
     showNextPhrase();
     // Wiggle title
     const el = document.getElementById("wiggle-header");
@@ -50,7 +52,9 @@ export default function Home() {
     }
     return () => {
       timeouts.forEach(clearTimeout);
-      taglineEl && (taglineEl.innerHTML = "");
+      if (taglineEl) {
+        taglineEl.innerHTML = "";
+      }
     };
   }, []);
 
