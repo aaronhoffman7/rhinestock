@@ -25,7 +25,7 @@ export default function FAQ() {
       </section>
       <section>
           <h2>I have access to food that gets wasted regularly. How can I get it ReDelicious?</h2>
-          <p> We're always open to new partnerships for gleaning food. Please get in contact with us and let's try to make it work. </p>
+          <p> We&apos;re always open to new partnerships for gleaning food. Please get in contact with us and let&apos;s try to make it work. </p>
       </section>
       </main>
       <Footer />

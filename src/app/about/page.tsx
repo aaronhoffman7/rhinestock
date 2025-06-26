@@ -47,7 +47,7 @@ export default function About() {
 </section>
 <h2>Consulting & Advocacy</h2>
 <p>
-  Our member-owners are involved in a wide range of work across environmental justice, food sovereignty, mutual aid, organizing, and cooperative models. We bring lived experience and deep community ties to issues like tenants’ + workers' rights, land access, ecological restoration, and local food systems. As a co-op, we offer consulting, facilitation, and public education rooted in collective care and radical imagination.
+  Our member-owners are involved in a wide range of work across environmental justice, food sovereignty, mutual aid, organizing, and cooperative models. We bring lived experience and deep community ties to issues like tenants&apos; + workers&apos; rights, land access, ecological restoration, and local food systems. As a co-op, we offer consulting, facilitation, and public education rooted in collective care and radical imagination.
 </p>
 <ul>
   <li>Food justice and food sovereignty</li>
