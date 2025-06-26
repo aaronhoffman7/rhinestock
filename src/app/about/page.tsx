@@ -7,22 +7,9 @@ import MarginShrooms from "../components/MarginShrooms";
 
 export default function About() {
   useEffect(() => {
-    // Tagline animation
     const taglineEl = document.getElementById("tagline");
     if (taglineEl) {
       taglineEl.classList.add("visible");
-    }
-
-    // Wiggle title
-    const el = document.getElementById("wiggle-header");
-    if (el) {
-      const text = el.dataset.text || "About Us";
-      el.innerHTML = '';
-      for (const char of text) {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        el.appendChild(span);
-      }
     }
   }, []);
 

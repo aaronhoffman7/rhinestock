@@ -40,17 +40,6 @@ export default function Home() {
       taglineEl.innerHTML = "";
     }
     showNextPhrase();
-    // Wiggle title
-    const el = document.getElementById("wiggle-header");
-    if (el) {
-      const text = el.dataset.text || "ReDelicious";
-      el.innerHTML = '';
-      for (const char of text) {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        el.appendChild(span);
-      }
-    }
     return () => {
       timeouts.forEach(clearTimeout);
       if (taglineEl) {
