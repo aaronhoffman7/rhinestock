@@ -1,25 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import MarginShrooms from "../components/MarginShrooms";
 import Image from "next/image";
 
 export default function Shop() {
-  useEffect(() => {
-    // Wiggle title
-    const el = document.getElementById("wiggle-header");
-    if (el) {
-      const text = el.dataset.text || "Shop";
-      el.innerHTML = '';
-      for (const char of text) {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        el.appendChild(span);
-      }
-    }
-  }, []);
 
   return (
     <>
