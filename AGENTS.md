@@ -16,7 +16,3 @@ Use the `@/` alias to import from `src`.
 - Components or pages that rely on browser APIs should include `"use client"`.
 - Keep TypeScript strictness and end files with a trailing newline.
 - Commit messages should be short, present-tense summaries, e.g. `Add footer` or `Update header links`.
-
-## Required checks
-
-Run `npm run lint` before committing to ensure ESLint passes.
