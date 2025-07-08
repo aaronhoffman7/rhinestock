@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import MarginShrooms from "./components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "./context/PageTitleContext";
 
-export default function Home() {
+export default function HomePage() {
+  const [, setTitle] = usePageTitle();
+
+  useEffect(() => {
+    setTitle("Home");
+  }, [setTitle]);
+
   useEffect(() => {
     // Tagline animation
     const phrases = [
@@ -50,8 +54,6 @@ export default function Home() {
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="ReDelicious" subtitle="DC's Food Lab Co-op" />
       <main>
         <p className="tagline" id="tagline"></p>
         <section className="edgewood-highlight two-column">
@@ -80,7 +82,6 @@ export default function Home() {
           <a href="https://venmo.com/redeliciousdc" target="_blank" className="donate-button venmo" rel="noopener noreferrer">Tip us on Venmo</a>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

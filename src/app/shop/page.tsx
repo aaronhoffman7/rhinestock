@@ -1,17 +1,19 @@
 "use client";
 
-import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MarginShrooms from "../components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 import Image from "next/image";
 
-export default function Shop() {
+
+export default function CommunityPage() {
+  const [, setTitle] = usePageTitle();
+
+  useEffect(() => {
+    setTitle("Community Resources");
+  }, [setTitle]);
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="Shop" />
       <main>
         <h2>merch, goodies, etc.</h2>
         <p>Under construction- more coming soon!</p>
@@ -39,7 +41,6 @@ export default function Shop() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
