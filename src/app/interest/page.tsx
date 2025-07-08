@@ -13,8 +13,7 @@ export default function InterestPage() {
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="Join the Co-op" />
+
       <main>
         <h2>Volunteer with ReDelicious</h2>
         <p>If you&apos;re interested in volunteering, join us anytime — we welcome new faces and many ways to contribute to food rescue, fermentation, cooking, and more!</p>
@@ -36,7 +35,6 @@ export default function InterestPage() {
           />
         </div>  
       </main>
-      <Footer />
     </>
   );
 }
