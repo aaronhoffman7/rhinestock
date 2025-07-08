@@ -16,28 +16,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get page title from page children (explained below)
+  const pageTitle =
+    (children as any)?.props?.pageTitle || "ReDelicious"; // fallback
+
   return (
     <html lang="en">
       <head>
-        <link
-          href="https://fonts.cdnfonts.com/css/titania"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.cdnfonts.com/css/titania" rel="stylesheet" />
       </head>
       <body>
-        {/* Background layer (behind everything) */}
+        <Header title={pageTitle} />
+        <main>{children}</main>
         <div id="star-container" />
-
-        {/* Main visible site content */}
-        <div className="site-container">
-          <Header title="ReDelicious" />
-          <main>{children}</main>
-          <MarginShrooms />
-          <Footer />
-        </div>
-
+        <MarginShrooms />
         <ShootingStars />
+        <Footer />
       </body>
     </html>
   );
 }
+
