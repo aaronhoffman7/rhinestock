@@ -1,9 +1,13 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Header({ title, subtitle }: { title: string; subtitle?: string }) {
+  const [scrollUp, setScrollUp] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Wiggle effect
   useEffect(() => {
     const el = document.getElementById("wiggle-header");
     if (el) {
@@ -16,8 +20,20 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
     }
   }, [title]);
 
+  // Scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setScrollUp(currentY < lastScrollY);
+      setLastScrollY(currentY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <header>
+    <header className={scrollUp ? "scroll-up" : "scroll-down"}>
       <div className="header-top">
         <Image
           src="/logos/ReDLogo6-25.svg"

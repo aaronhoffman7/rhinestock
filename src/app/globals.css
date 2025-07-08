@@ -24,20 +24,20 @@ body {
   padding: 0;
   color: var(--rdPurpleDark);
   transition: background 1s ease;
-
-
+  overflow-x: hidden; /* ✅ this is OK */
+  overflow-y: visible; /* ✅ default */
 }
 
 header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   background: linear-gradient(180deg, var(--rdPurpleDark) 50%, transparent 85%);
   background-size: 400% 400%;
   animation: gradientShift 10s ease infinite;
-  text-align: center;
   padding: 2em 0 1em 0;
   border-bottom: 4px solid black;
-  position: relative;
   overflow: hidden;
-  z-index: 1;
 }
 
 
@@ -381,32 +381,11 @@ p {
 }
 
 
-
-#star-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0; /* not too negative */
-  overflow: hidden;
-}
-
-
-.shooting-star {
-  position: fixed;
-  border-radius: 10px;
-  filter: blur(10px);
-  background: radial-gradient(circle at center, #bdbdbd 60%, #a3a3e9 10%);
-  pointer-events: none;
-}
-
-
 .margin-shroom {
   position: absolute;
-  top: 99%;
-  width: 100px;
+  top: 97%;
+  width: 120px;
+  height: auto;
   opacity: 0.8;
   z-index: 2;
   pointer-events: none;
@@ -545,4 +524,43 @@ p {
   width: 100%;
   border: none;
   background-color: #fff;
+}
+
+#star-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1; /* not too negative */
+  overflow: hidden;
+}
+
+
+.shooting-star {
+  position: fixed;
+  border-radius: 10px;
+  filter: blur(10px);
+  background: radial-gradient(circle at center, #bdbdbd 60%, #a3a3e9 10%);
+  pointer-events: none;
+}
+
+header.scroll-down {
+  padding: 0.6em 0 0.3em 0;
+  transform: scale(0.95);
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+header.scroll-up {
+  padding: 2em 0 1em 0;
+  transform: scale(1);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.site-container {
+  position: relative;
+  z-index: 1; /* Ensures it's above stars */
 }
