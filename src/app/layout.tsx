@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+// app/layout.tsx
 import "./globals.css";
-import ShootingStars from "./components/ShootingStars";
-import MarginShrooms from "./components/MarginShrooms";
+import type { Metadata } from "next";
+import { PageTitleProvider, usePageTitle } from "./context/PageTitleContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import MarginShrooms from "./components/MarginShrooms";
+import ShootingStars from "./components/ShootingStars";
 
 export const metadata: Metadata = {
   title: "ReDelicious - DC's Food Lab Co-op",
@@ -11,29 +13,28 @@ export const metadata: Metadata = {
     "DC's Food Lab Co-op, transforming food waste into delicious, sustainable, and educational experiences",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // Get page title from page children (explained below)
-  const pageTitle =
-    (children as any)?.props?.pageTitle || "ReDelicious"; // fallback
+// Create a wrapper to pull title from context
+function HeaderWithTitle() {
+  const [title] = usePageTitle();
+  return <Header title={title} />;
+}
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         <link href="https://fonts.cdnfonts.com/css/titania" rel="stylesheet" />
       </head>
       <body>
-        <Header title={pageTitle} />
-        <main>{children}</main>
-        <div id="star-container" />
-        <MarginShrooms />
-        <ShootingStars />
-        <Footer />
+        <PageTitleProvider>
+          <HeaderWithTitle />
+          <main>{children}</main>
+          <div id="star-container" />
+          <MarginShrooms />
+          <ShootingStars />
+          <Footer />
+        </PageTitleProvider>
       </body>
     </html>
   );
 }
-

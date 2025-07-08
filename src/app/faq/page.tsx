@@ -1,8 +1,17 @@
+// app/faq/page.tsx
 "use client";
 
-import React from "react";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 
-function FAQPage() {
+export default function FAQPage() {
+  const [, setTitle] = usePageTitle();
+
+  useEffect(() => {
+    setTitle("FAQ");
+  }, [setTitle]);
+
+
   return (
     <main>
       <section>
@@ -54,8 +63,3 @@ function FAQPage() {
     </main>
   );
 }
-
-// Pass this up to layout
-FAQPage.pageTitle = "FAQ";
-
-export default FAQPage;
