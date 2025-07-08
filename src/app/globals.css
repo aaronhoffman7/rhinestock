@@ -422,28 +422,6 @@ p {
   transform: translateX(-50%) scaleX(-1); /* mirror image */
 }
 
-.video-wrapper {
-  position: relative;
-  width: 200px;       /* or whatever size you want */
-  height: 20px;
-  overflow: hidden;
-  margin: 2rem auto;  /* center on page */
-  border-radius: 12px;
-}
-
-.background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 150%;
-  object-fit: cover;
-  opacity: 0.22;       /* adjust to your liking */
-  z-index: 1;
-  pointer-events: none;
-  transform: translateY(-30%); /* 👈 this shifts it up to show lower part */
-}
-
 .text-overlay {
   position: relative;
   z-index: 2;

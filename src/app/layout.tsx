@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ShootingStars from "./components/ShootingStars";
+import MarginShrooms from "./components/MarginShrooms";
 
 export const metadata: Metadata = {
   title: "ReDelicious - DC's Food Lab Co-op",
-  description: "DC's Food Lab Co-op transforming food waste into delicious, sustainable, and educational experiences",
+  description: "DC's Food Lab Co-op, transforming food waste into delicious, sustainable, and educational experiences",
 };
 
 export default function RootLayout({
@@ -19,9 +20,10 @@ export default function RootLayout({
       </head>
       <body>
         <div id="star-container"></div>
-        {children}
+          <main>{children}</main>
+        <MarginShrooms />
         <ShootingStars />
       </body>
     </html>
   );
-}
+} 
