@@ -536,19 +536,45 @@ p {
   pointer-events: none;
 }
 
-header.scroll-down {
-  padding: 0.6em 0 0.3em 0;
-  transform: scale(0.95);
-  opacity: 0.9;
-  transition: all 0.3s ease;
+header {
+  position: sticky; /* or fixed */
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  background-color: #fff; /* or transparent or your gradient */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-header.scroll-up {
-  padding: 2em 0 1em 0;
-  transform: scale(1);
-  opacity: 1;
-  transition: all 0.3s ease;
+
+/* This is your animated container */
+.header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, padding 0.3s ease;
+  padding: 1rem 0;
 }
+
+/* Shrink effect on scroll */
+.scroll-down {
+  transform: scale(0.9);
+  padding: 0.5rem 0;
+}
+
+.scroll-up {
+  transform: scale(1);
+  padding: 1rem 0;
+}
+
+.logo {
+  margin-bottom: 0.5rem;
+}
+
+.header-title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
 
 .site-container {
   position: relative;
