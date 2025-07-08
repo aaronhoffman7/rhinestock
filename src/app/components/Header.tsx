@@ -30,30 +30,28 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
   }, []);
 
   return (
-    <header className={scrollUp ? "scroll-up" : "scroll-down"}>
-      <div className="header-top">
-        <Image
-          src="/logos/ReDLogo6-25.svg"
-          alt="ReDelicious logo"
-          className="logo"
-          width={100}
-          height={100}
-        />
-        <div className="header-title">
-          <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
-          {subtitle && <h3>{subtitle}</h3>}
-        </div>
-      </div>
-      <nav>
-        <Link href="/">Home</Link>
-        <Link href="/about">About Us</Link>
-        <Link href="/calendar">Events</Link>
-        <Link href="/interest">Get Involved</Link>
-        <Link href="/members">Members</Link>
-        <Link href="/faq">FAQ</Link>
-        <Link href="/community">Resources</Link>
-        <Link href="/shop">Shop</Link>
-      </nav>
-    </header>
-  );
+  <header className={scrollUp ? "scroll-up" : "scroll-down"}>
+    <Image
+      src="/logos/ReDLogo6-25.svg"
+      alt="ReDelicious logo"
+      className="logo"
+      width={100}
+      height={100}
+    />
+    <div className="header-title">
+      <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
+      {subtitle && <h3>{subtitle}</h3>}
+    </div>
+    <nav>
+      <Link href="/">Home</Link>
+      <Link href="/about">About Us</Link>
+      <Link href="/calendar">Events</Link>
+      <Link href="/interest">Get Involved</Link>
+      <Link href="/members">Members</Link>
+      <Link href="/faq">FAQ</Link>
+      <Link href="/community">Resources</Link>
+      <Link href="/shop">Shop</Link>
+    </nav>
+  </header>
+);
 }
