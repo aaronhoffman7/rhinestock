@@ -1,22 +1,17 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MarginShrooms from "../components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 
-export default function About() {
+export default function AboutPage() {
+  const [, setTitle] = usePageTitle();
+
   useEffect(() => {
-    const taglineEl = document.getElementById("tagline");
-    if (taglineEl) {
-      taglineEl.classList.add("visible");
-    }
-  }, []);
+    setTitle("About Us");
+  }, [setTitle]);
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="About Us" />
       <main>
       <section>
   <p className="subtagline" id="tagline">
@@ -60,7 +55,6 @@ export default function About() {
   <li>Garden design + conceptual planning, grow room setup assistance</li>
 </ul>
       </main>
-      <Footer />
     </>
   );
 }

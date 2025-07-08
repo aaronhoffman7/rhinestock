@@ -1,16 +1,17 @@
 "use client";
 
-import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MarginShrooms from "../components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 
-export default function Community() {
+export default function CommunityPage() {
+  const [, setTitle] = usePageTitle();
+
+  useEffect(() => {
+    setTitle("Community Resources");
+  }, [setTitle]);
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="Community Resources" />
       <main>
         <h2>Sharing Knowledge & Mutual Support</h2>
         <p>ReDelicious is rooted in community care and collective learning. Here are some of the resources, guides, and local organizations that inform our work, and may support yours.</p>
@@ -47,7 +48,6 @@ export default function Community() {
           <button type="submit">Submit</button>
         </form>
       </main>
-      <Footer />
     </>
   );
 }

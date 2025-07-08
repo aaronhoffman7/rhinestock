@@ -1,24 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MarginShrooms from "../components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 
-export default function Interest() {
+export default function InterestPage() {
+  const [, setTitle] = usePageTitle();
+
   useEffect(() => {
-    // Wiggle title
-    const el = document.getElementById("wiggle-header");
-    if (el) {
-      const text = el.dataset.text || "Join the Co-op";
-      el.innerHTML = '';
-      for (const char of text) {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        el.appendChild(span);
-      }
-    }
-  }, []);
+    setTitle("FAQ");
+  }, [setTitle]);
+
 
   return (
     <>

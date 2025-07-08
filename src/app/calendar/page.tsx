@@ -1,16 +1,17 @@
 "use client";
 
-import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MarginShrooms from "../components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 
-export default function Calendar() {
+export default function CalendarPage() {
+  const [, setTitle] = usePageTitle();
+
+  useEffect(() => {
+    setTitle("Events");
+  }, [setTitle]);
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="Events" />
       <main style={{
         padding: "2em",
         maxWidth: "1000px",
@@ -42,7 +43,6 @@ export default function Calendar() {
           />
         </div>
       </main>
-      <Footer />
     </>
   );
 }

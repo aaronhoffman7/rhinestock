@@ -1,16 +1,18 @@
 "use client";
 
-import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MarginShrooms from "../components/MarginShrooms";
+import { useEffect } from "react";
+import { usePageTitle } from "../context/PageTitleContext";
 
-export default function Members() {
+export default function MembersPage() {
+  const [, setTitle] = usePageTitle();
+
+  useEffect(() => {
+    setTitle("FAQ");
+  }, [setTitle]);
+
 
   return (
     <>
-      <MarginShrooms />
-      <Header title="Meet Our Members" />
       <main>
         <section className="bio">
           <h2>Bri</h2>
@@ -93,7 +95,6 @@ export default function Members() {
           <p>Fermentation specialist and co-op co-founder. Loves koji and community feasts.</p>
         </section>
       </main>
-      <Footer />
     </>
   );
 }
