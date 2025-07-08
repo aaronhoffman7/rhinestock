@@ -1,36 +1,33 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Header({ title, subtitle }: { title: string; subtitle?: string }) {
   const [scrollUp, setScrollUp] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
 
-  // Wiggle effect
-  useEffect(() => {
-    const el = document.getElementById("wiggle-header");
-    if (el) {
-      el.innerHTML = "";
-      for (const char of title) {
-        const span = document.createElement("span");
-        span.textContent = char === " " ? "\u00A0" : char;
-        el.appendChild(span);
-      }
-    }
-  }, [title]);
+  function renderWiggleText(text: string) {
+    return (
+      <>
+        {Array.from(text).map((char, i) => (
+          <span key={i}>{char === " " ? "\u00A0" : char}</span>
+        ))}
+      </>
+    );
+  }
 
   // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
-      setScrollUp(currentY < lastScrollY);
-      setLastScrollY(currentY);
+      setScrollUp(currentY < lastScrollYRef.current);
+      lastScrollYRef.current = currentY;
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return (
     <header className={scrollUp ? "scroll-up" : "scroll-down"}>
@@ -43,7 +40,7 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
           height={100}
         />
         <div className="header-title">
-          <h1 className="wiggle-title" id="wiggle-header" data-text={title}></h1>
+          <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
           {subtitle && <h3>{subtitle}</h3>}
         </div>
       </div>
