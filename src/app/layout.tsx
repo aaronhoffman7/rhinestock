@@ -13,12 +13,6 @@ export const metadata: Metadata = {
     "DC's Food Lab Co-op, transforming food waste into delicious, sustainable, and educational experiences",
 };
 
-// Create a wrapper to pull title from context
-function HeaderWithTitle() {
-  const [title] = usePageTitle();
-  return <Header title={title} />;
-}
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -27,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <PageTitleProvider>
-          <HeaderWithTitle />
+          <Header />
           <main>{children}</main>
           <div id="star-container" />
           <MarginShrooms />
