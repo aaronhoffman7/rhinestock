@@ -31,18 +31,20 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
 
   return (
     <header>
-  <div className={scrollUp ? "header-inner scroll-up" : "header-inner scroll-down"}>
-    <Image
-      src="/logos/ReDLogo6-25.svg"
-      alt="ReDelicious logo"
-      className="logo"
-      width={100}
-      height={100}
-    />
-    <div className="header-title">
-      <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
-      {subtitle && <h3>{subtitle}</h3>}
-    </div>
+    <div className={scrollUp ? "header-inner scroll-up" : "header-inner scroll-down"}>
+      <div className="header-brand">
+        <Image
+          src="/logos/ReDLogo6-25.svg"
+          alt="ReDelicious logo"
+          className="logo"
+          width={80}
+          height={80}
+        />
+        <div className="header-title">
+          <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
+          {subtitle && <h3>{subtitle}</h3>}
+        </div>
+      </div>
     <nav>
         <Link href="/">Home</Link>
         <Link href="/about">About Us</Link>

@@ -555,6 +555,13 @@ header {
   padding: 1rem 0;
 }
 
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 /* Shrink effect on scroll */
 .scroll-down {
   transform: scale(0.9);
