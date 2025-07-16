@@ -19,13 +19,14 @@
 
 body {
   font-family: var(--headerFont);
-  background: linear-gradient(180deg, var(--rdSkyBlue) 30%, var(--rdlavender) 70%);
+  background: linear-gradient(180deg, var(--rdSkyBlue) 10%, var(--rdlavender) 90%);
   margin: 0;
   padding: 0;
   color: var(--rdPurpleDark);
   transition: background 1s ease;
   overflow-x: hidden; /* ✅ this is OK */
   overflow-y: visible; /* ✅ default */
+  
 }
 
 header {
@@ -69,8 +70,10 @@ h1 {
   text-shadow: 2px 2px #000;
 }
 
+
+
 nav a {
-  margin: 0 0.65em;
+  margin: 0 1.25em;
   color: var(--rdlavender);
   text-decoration: none;
   font-weight: bold;
@@ -97,14 +100,12 @@ nav a:hover {
 }
 
 main {
-  max-width: 1100px;
-  margin: 1em auto;
-  padding: 0 1.5em;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 2;
-
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  line-height: 1.7;
 }
+
 
 
 footer {
@@ -361,9 +362,9 @@ p {
 
 @keyframes shroomWiggle {
   0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
-  10%  { transform: translateY(-.5px) translateX(0.3px) rotate(.9deg) scale(1.015); }
+  10%  { transform: translateY(-.2px) translateX(0.3px) rotate(.9deg) scale(1.015); }
   25%  { transform: translateY(.1px) translateX(-.3px) rotate(-.9deg) scale(0.98); }
-  40%  { transform: translateY(-.3px) translateX(.5px) rotate(.9deg) scale(1.025); }
+  40%  { transform: translateY(-.3px) translateX(.3px) rotate(.8deg) scale(1.025); }
   55%  { transform: translateY(.2px) translateX(-0.3px) rotate(-.9deg) scale(1); }
   70%  { transform: translateY(-.3px) translateX(0.3px) rotate(.9deg) scale(0.98); }
   85%  { transform: translateY(.2px) translateX(-0.3px) rotate(-.9deg) scale(1.01); }
@@ -536,16 +537,6 @@ p {
   pointer-events: none;
 }
 
-header {
-  position: sticky; /* or fixed */
-  top: 0;
-  z-index: 999;
-  width: 100%;
-  background-color: #fff; /* or transparent or your gradient */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-
 /* This is your animated container */
 .header-inner {
   display: flex;
@@ -564,7 +555,7 @@ header {
 
 /* Shrink effect on scroll */
 .scroll-down {
-  transform: scale(0.9);
+  transform: scale(0.8);
   padding: 0.5rem 0;
 }
 
