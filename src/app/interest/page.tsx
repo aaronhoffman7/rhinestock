@@ -18,7 +18,7 @@ export default function InterestPage() {
         <h2>Volunteer with ReDelicious</h2>
         <p>If you&apos;re interested in volunteering, join us anytime — we welcome new faces and many ways to contribute to food rescue, fermentation, cooking, and more!</p>
         <h2>Join the list</h2>
-        <p>to stay up to date on events and other communications (produce puns guaranteed)</p>
+        <p>Fill out the form below to stay up to date on events and other communications- produce puns guaranteed.</p>
         <h2>Partner with us</h2>
         <p>
           We are always looking for collaborations with organizations, businesses, collectives, and individuals. 

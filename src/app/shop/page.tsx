@@ -20,7 +20,7 @@ export default function CommunityPage() {
         <div className="product-grid">
           <div className="product-card">
             <h4>ReDelish T-Shirt</h4>
-            <Image src="/photos/cherry.jpg" alt="ReDelish T-Shirt" className="product-image" width={200} height={200} />
+            <Image src="/photos/strawbs.png" alt="ReDelish T-Shirt" className="product-image" width={200} height={200} />
             <p>Support ReDelicious and stay fresh in this limited-edition Pickle Dreamz tee.</p>
             <p className="price">$25</p>
             <button>Buy Now</button>
@@ -34,7 +34,7 @@ export default function CommunityPage() {
           </div>
           <div className="product-card">
             <h4>Mushroom Grow Kits</h4>
-            <Image src="/photos/cherry.jpg" alt="Mycelium Candle" className="product-image" width={200} height={200} />
+            <Image src="/photos/freebread.jpg" alt="Mycelium Candle" className="product-image" width={200} height={200} />
             <p>Grow your own local, gourmet, and medicinal varieties</p>
             <p className="price">from $15</p>
             <button>Buy Now</button>
