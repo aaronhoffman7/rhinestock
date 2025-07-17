@@ -1,18 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePageTitle } from "./context/PageTitleContext";
 import Image from "next/image";
 
+const photoList = [
+  "/photos/cherry.jpg",
+  "/photos/freebread.jpg",
+  "/photos/strawbs.png"
+];
+
 export default function HomePage() {
   const [, setTitle] = usePageTitle();
+  const [currentPhoto, setCurrentPhoto] = useState(0);
 
+  // Set page title
   useEffect(() => {
     setTitle("Home");
   }, [setTitle]);
 
+  // Animate tagline
   useEffect(() => {
-    // Tagline animation
     const phrases = [
       "turning",
       "food",
@@ -24,6 +32,7 @@ export default function HomePage() {
     const timeouts: NodeJS.Timeout[] = [];
     let currentPhrase = 0;
     const taglineEl = document.getElementById("tagline");
+
     function showNextPhrase() {
       if (!taglineEl) return;
       const phraseSpan = document.createElement("span");
@@ -31,27 +40,33 @@ export default function HomePage() {
       phraseSpan.style.opacity = "0";
       phraseSpan.style.transition = "opacity 0.8s ease";
       taglineEl.appendChild(phraseSpan);
-      timeouts.push(
-        setTimeout(() => {
-          phraseSpan.style.opacity = "1";
-        }, 50)
-      );
+      timeouts.push(setTimeout(() => {
+        phraseSpan.style.opacity = "1";
+      }, 50));
       currentPhrase++;
       if (currentPhrase < phrases.length) {
         timeouts.push(setTimeout(showNextPhrase, 780));
       }
     }
-    if (taglineEl) {
-      taglineEl.innerHTML = "";
-    }
+
+    if (taglineEl) taglineEl.innerHTML = "";
     showNextPhrase();
+
     return () => {
       timeouts.forEach(clearTimeout);
-      if (taglineEl) {
-        taglineEl.innerHTML = "";
-      }
+      if (taglineEl) taglineEl.innerHTML = "";
     };
   }, []);
+
+  // Cycle slideshow photos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhoto((prev) => (prev + 1) % photoList.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+
 
   return (
     <>
@@ -61,8 +76,8 @@ export default function HomePage() {
         <section className="info-row">
           <div className="photo-column">
             <Image
-              src="/photos/cherry.jpg"
-              alt="Cherry vinegar bottle"
+              src={photoList[currentPhoto]}
+              alt="slideshow"
               width={300}
               height={300}
               className="homepage-photo"
@@ -136,3 +151,4 @@ export default function HomePage() {
     </>
   );
 }
+
