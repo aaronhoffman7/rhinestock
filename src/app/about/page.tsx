@@ -32,8 +32,8 @@ export default function AboutPage() {
           workshops, community feasts, and mutual aid events throughout DC.
         </p>
         <h2>History of ReDelicious</h2>
-        <p>We were founded in 2022 by a group of friends with overlapping interests in food justice, fermentation, mycology, foraging, and lots more. We began regularly gleaning leftover food from farmer's markets- with the help of with the help of {" "}<a href="https://foodrescue.us" target="_blank" rel="noopener noreferrer"> Food Rescue US
-  </a>- to host a neighborhood distro at a home in Mt. Pleasant, with a goal to not just give away food but to educate and facilitate community empowerment in a social space. The word spread, and we outgrew our normal gathering spot and decided it was time to formally organize. What started as a Sunday stoop hang where neighbors gathered to give away and repurpose food that would otherwise be wasted, organically grew into the co-op food lab it is today. We've been growing fast and have lots more history to write. <a href="/interest">Get involved today.</a></p>
+        <p>We were founded in 2022 by a group of friends with overlapping interests in food justice, fermentation, mycology, foraging, and lots more. We began regularly gleaning leftover food from farmer&rsquo;s markets- with the help of with the help of {" "}<a href="https://foodrescue.us" target="_blank" rel="noopener noreferrer"> Food Rescue US
+  </a> - to host a neighborhood distro at a home in Mt. Pleasant, with a goal to not just give away food but to educate and facilitate community empowerment in a social space. The word spread, and we outgrew our normal gathering spot and decided it was time to formally organize. What started as a Sunday stoop hang where neighbors gathered to give away and repurpose food that would otherwise be wasted, organically grew into the co-op food lab it is today. We&rsquo;ve been growing fast and have lots more history to write. <a href="/interest">Get involved today.</a></p>
         <h2>Events & Programming</h2>
         <p>We have all kinds of events. Check our calendar to stay in the loop. Past topics include:</p>
         <ul>
