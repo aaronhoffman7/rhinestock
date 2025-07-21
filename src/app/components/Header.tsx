@@ -68,13 +68,8 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
 
     <nav>
       <Link href="/">Home</Link>
-      <Link href="/about">About Us</Link>
-      <Link href="/calendar">Events</Link>
       <Link href="/interest">Get Involved</Link>
-      <Link href="/members">Members</Link>
-      <Link href="/faq">FAQ</Link>
       <Link href="/community">Resources</Link>
-      <Link href="/shop">Shop</Link>
     </nav>
   </div>
 </header>
