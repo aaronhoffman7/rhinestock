@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <PageTitleProvider>
-          <Header title="ReDelicious" />
+          <Header title="Rhinestock" />
           <main>{children}</main>
           <div id="star-container" />
           <MarginShrooms />
