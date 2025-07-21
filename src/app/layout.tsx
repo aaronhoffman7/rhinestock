@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { PageTitleProvider } from "./context/PageTitleContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import MarginShrooms from "./components/MarginShrooms";
 import ShootingStars from "./components/ShootingStars";
 
 export const metadata: Metadata = {
@@ -24,7 +23,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header title="Rhinestock" />
           <main>{children}</main>
           <div id="star-container" />
-          <MarginShrooms />
           <ShootingStars />
           <Footer />
         </PageTitleProvider>

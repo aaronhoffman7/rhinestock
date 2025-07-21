@@ -31,45 +31,21 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
 
   return (
     <header>
-  {/* Floating icon appears on top right */}
-  <div className="header-icons">
-    <a
-      href="https://instagram.com/redeliciousdc"
-      target="_blank"
-      rel="noopener"
-      className="instagram-link"
-      aria-label="Instagram"
-    >
-      <Image
-  src="/photos/instagram.svg" // adjust path to your PNG
-  alt="Instagram"
-  width={56}
-  height={56}
-  className="ig-icon"
-/>
-    </a>
-  </div>
-
   {/* Main inner header content */}
   <div className={scrollUp ? "header-inner scroll-up" : "header-inner scroll-down"}>
     <div className="header-brand">
-      <Image
-        src="/logos/ReDLogo6-25.svg"
-        alt="ReDelicious logo"
-        className="logo"
-        width={80}
-        height={80}
-      />
       <div className="header-title">
         <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
         {subtitle && <h3>{subtitle}</h3>}
       </div>
     </div>
-
     <nav>
       <Link href="/">Home</Link>
-      <Link href="/interest">Get Involved</Link>
-      <Link href="/community">Resources</Link>
+      <Link href="/itinerary">Itinerary</Link>
+      <Link href="/excursions">Excursions</Link>
+      <Link href="/community">Sign Ups</Link>
+      <Link href="/interest">FAQ</Link>
+      
     </nav>
   </div>
 </header>
