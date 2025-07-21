@@ -6,7 +6,7 @@ type PageTitleContextType = [string, React.Dispatch<React.SetStateAction<string>
 const PageTitleContext = createContext<PageTitleContextType | undefined>(undefined);
 
 export const PageTitleProvider = ({ children }: { children: React.ReactNode }) => {
-  const state = useState("ReDelicious");
+  const state = useState("Rhinestock");
   return (
     <PageTitleContext.Provider value={state}>
       {children}

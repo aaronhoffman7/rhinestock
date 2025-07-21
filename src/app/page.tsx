@@ -22,12 +22,8 @@ export default function HomePage() {
   // Animate tagline
   useEffect(() => {
     const phrases = [
-      "turning",
-      "food",
-      "waste",
-      "into",
-      "delicious",
-      "community"
+      "August 30th- Septermber 1st, 2025",
+      "Rhinebeck, NY"
     ];
     const timeouts: NodeJS.Timeout[] = [];
     let currentPhrase = 0;
@@ -87,13 +83,7 @@ export default function HomePage() {
           <div className="text-column">
             <div className="text-content">
               <p>
-                ReDelicious is a food lab co-op transforming food waste into delicious, sustainable, and educational experiences. We host a weekly community feast + distro at{" "}
-                <a href="https://www.edgewoodcommunityfarm.org" target="_blank">
-                  Edgewood Community Farm
-                </a>, and pop up at a variety of locations for regularly scheduled workshops and events.
-              </p>
-              <p>
-                We are building community through cooking, preserving, redistributing, cultivating, and foraging for delicious food. <strong>All are welcome and the food is free.</strong>
+                A three day "festival" in the beautiful Hudson Valley, hosted at the house Aaron and Elliot grew up at! Come for communal meals, music + dancing, activities, camping, and excursions to nearby attractions. Come for a few hours or the whole weekend long!
               </p>
             </div>
 

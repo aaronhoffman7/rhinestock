@@ -8,9 +8,9 @@ import MarginShrooms from "./components/MarginShrooms";
 import ShootingStars from "./components/ShootingStars";
 
 export const metadata: Metadata = {
-  title: "ReDelicious - DC's Food Lab Co-op",
+  title: "Rhinestock",
   description:
-    "DC's Food Lab Co-op, transforming food waste into delicious, sustainable, and educational experiences",
+    "First annual woooooooo",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
