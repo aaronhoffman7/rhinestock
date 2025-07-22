@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 type SignUp = {
   timestamp: string;
   name: string;
-  slotType: "Grilling" | "DJ";
+  slotType: "Grilling" | "DJ" | "Driver" | "Rider" | "Activity";
   time: string;
 };
 
@@ -41,12 +41,28 @@ const DJ_SLOTS: Record<string, { label: string; capacity: number }> = {
   sunday_930am: { label: "Sunday, 9:30 AM", capacity: 1 },
 };
 
+const DRIVER_SLOTS: Record<string, { label: string; capacity: number }> = {
+  from_dc_fri: { label: "Friday - Leaving from DC", capacity: 4 },
+  to_dc_sun: { label: "Sunday - Returning to DC", capacity: 4 },
+};
+
+const RIDER_SLOTS: Record<string, { label: string; capacity: number }> = {
+  from_dc_fri: { label: "Friday - Ride from DC", capacity: 10 },
+  to_dc_sun: { label: "Sunday - Ride back to DC", capacity: 10 },
+};
+
+const ACTIVITY_SLOTS: Record<string, { label: string; capacity: number }> = {
+  saturday_afternoon: { label: "Saturday Afternoon Workshop", capacity: 3 },
+  sunday_morning: { label: "Sunday Morning Activity", capacity: 2 },
+};
+
+
 const CSV_URL =
   "https://script.google.com/macros/s/AKfycbwEMhCModxmjlHq0qafU-woC-4kFlz1FoxBEi9TYB91UAeZSfa6RSzC5XD31aVLDwAy/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
-  const [selectedSlotType, setSelectedSlotType] = useState<"Grilling" | "DJ">("Grilling");
+  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
 
   useEffect(() => {
   fetch(CSV_URL + "?t=" + Date.now(), { cache: "no-store" })
@@ -56,16 +72,28 @@ export default function SignUpsClient() {
         .map((row) => {
           const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
           const normalizedSlotType =
-            slotTypeRaw === "grilling"
-              ? "Grilling"
-              : slotTypeRaw === "dj"
-              ? "DJ"
-              : null;
+  slotTypeRaw === "grilling"
+    ? "Grilling"
+    : slotTypeRaw === "dj"
+    ? "DJ"
+    : slotTypeRaw === "driver"
+    ? "Driver"
+    : slotTypeRaw === "rider"
+    ? "Rider"
+    : slotTypeRaw === "activity"
+    ? "Activity"
+    : null;
+
 
           if (!normalizedSlotType) return null;
 
           const validSlots =
-            normalizedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+  normalizedSlotType === "Grilling" ? GRILL_SLOTS :
+  normalizedSlotType === "DJ" ? DJ_SLOTS :
+  normalizedSlotType === "Driver" ? DRIVER_SLOTS :
+  normalizedSlotType === "Rider" ? RIDER_SLOTS :
+ ACTIVITY_SLOTS;
+
 
           const trimmedTime = row["Time"]?.trim();
           if (!validSlots[trimmedTime]) return null;
@@ -86,8 +114,13 @@ export default function SignUpsClient() {
 }, []);
 
 
-  const SLOT_CONFIG =
-    selectedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+const SLOT_CONFIG =
+  selectedSlotType === "Grilling" ? GRILL_SLOTS :
+  selectedSlotType === "DJ" ? DJ_SLOTS :
+  selectedSlotType === "Driver" ? DRIVER_SLOTS :
+  selectedSlotType === "Rider" ? RIDER_SLOTS :
+  ACTIVITY_SLOTS;
+
 
   const takenCount: Record<string, number> = {};
   signUps
@@ -96,13 +129,21 @@ export default function SignUpsClient() {
       takenCount[s.time] = (takenCount[s.time] || 0) + 1;
     });
 
-  const groupedByType = {
-    Grilling: {} as Record<string, string[]>,
-    DJ: {} as Record<string, string[]>,
-  };
+const groupedByType = {
+  Grilling: {} as Record<string, string[]>,
+  DJ: {} as Record<string, string[]>,
+  Driver: {} as Record<string, string[]>,
+  Rider: {} as Record<string, string[]>,
+  Activity: {} as Record<string, string[]>,
+};
+
 
   for (const slot of Object.keys(GRILL_SLOTS)) groupedByType.Grilling[slot] = [];
-  for (const slot of Object.keys(DJ_SLOTS)) groupedByType.DJ[slot] = [];
+for (const slot of Object.keys(DJ_SLOTS)) groupedByType.DJ[slot] = [];
+for (const slot of Object.keys(DRIVER_SLOTS)) groupedByType.Driver[slot] = [];
+for (const slot of Object.keys(RIDER_SLOTS)) groupedByType.Rider[slot] = [];
+for (const slot of Object.keys(ACTIVITY_SLOTS)) groupedByType.Activity[slot] = [];
+
 
   for (const s of signUps) {
     groupedByType[s.slotType][s.time].push(s.name);
@@ -135,7 +176,7 @@ export default function SignUpsClient() {
                       marginBottom: "0.4rem",
                     }}
                   >
-                    {slot.label.split(",")[1]?.trim()} — {names.join(", ")}
+                    {slot.label} — {names.join(", ")}
                   </li>
                 );
               })}
@@ -149,7 +190,7 @@ export default function SignUpsClient() {
   return (
     <main>
       <div style={{ maxWidth: "700px", margin: "0 auto", padding: "1rem" }}>
-        <h2>Sign Up for a Slot</h2>
+        <h2>Sign Up for something helpful or burdensome</h2>
         <form
           action="https://script.google.com/macros/s/AKfycbxPY05vXtt02iunZtgeKeRoBsR1A6h2SFwPPBIZqG61PknkolvfTlQ2pbegLigR61z6/exec"
           method="POST"
@@ -167,17 +208,22 @@ export default function SignUpsClient() {
           <br />
 
           <label>
-            Slot Type:<br />
+            Sign up type:<br />
             <select
-              value={selectedSlotType}
-              onChange={(e) =>
-                setSelectedSlotType(e.target.value as "Grilling" | "DJ")
-              }
-              required
-            >
-              <option value="Grilling">Grilling</option>
-              <option value="DJ">DJ</option>
-            </select>
+  value={selectedSlotType}
+  onChange={(e) =>
+    setSelectedSlotType(
+      e.target.value as SignUp["slotType"]
+    )
+  }
+  required
+>
+  <option value="Grilling">Grilling</option>
+  <option value="DJ">DJ</option>
+  <option value="Driver">Carpool Driver</option>
+  <option value="Rider">Carpool Rider</option>
+  <option value="Activity">Activity Host</option>
+</select>
           </label>
           <br />
           <br />
@@ -211,6 +257,10 @@ export default function SignUpsClient() {
 
         {renderSchedule(GRILL_SLOTS, groupedByType.Grilling, "Grilling Signups")}
         {renderSchedule(DJ_SLOTS, groupedByType.DJ, "DJ Lineup")}
+        {renderSchedule(DRIVER_SLOTS, groupedByType.Driver, "Carpool Drivers")}
+{renderSchedule(RIDER_SLOTS, groupedByType.Rider, "Carpool Riders")}
+{renderSchedule(ACTIVITY_SLOTS, groupedByType.Activity, "Workshops & Activities")}
+
       </div>
     </main>
   );
