@@ -45,7 +45,7 @@ export default function ExcursionsPage() {
     <main className="site-container">
       <h2 className="tagline">Local Excursions</h2>
       <div className="text-column">
-        <p>Explore the Hudson Valley! These are a few nearby options we’re excited about- totally optional, but available if you want to break out for a mini adventure.</p>
+        <p style={{ marginBottom: "2.3rem" }}>Explore the Hudson Valley! These are a few nearby options we’re excited about- totally optional, but available if you want to break out for a mini adventure.</p>
 
         <ul style={{ listStyleType: "none", padding: 0 }}>
           {excursions.map((excursion, idx) => (
