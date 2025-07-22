@@ -9,21 +9,6 @@ type SignUp = {
   time: string;
 };
 
-const availableSlots = {
-  Grilling: [
-    "12:00 – 12:30 PM",
-    "12:30 – 1:00 PM",
-    "1:00 – 1:30 PM",
-    "1:30 – 2:00 PM"
-  ],
-  DJ: [
-    "2:00 – 2:30 PM",
-    "2:30 – 3:00 PM",
-    "3:00 – 3:30 PM",
-    "3:30 – 4:00 PM"
-  ]
-};
-
 export default function SignUps() {
   const [, setTitle] = usePageTitle();
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -36,17 +21,6 @@ export default function SignUps() {
   useEffect(() => {
     setTitle("Event Sign Ups");
   }, [setTitle]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formData.name || !formData.time) return;
-
-    setSignUps((prev) => [...prev, formData]);
-    setFormData({ name: "", slotType: "Grilling", time: "" });
-  };
-
-  const takenTimes = signUps.map((s) => s.time);
 
   return (
     <main>
