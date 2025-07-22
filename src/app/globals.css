@@ -188,8 +188,8 @@ p {
 /* Give each letter a slight animation offset */
 .wiggle-title span {
   font-family: var(--headerFont);
-  font-size: 40px;
-  letter-spacing: 1.65px;
+  font-size: 90px;
+  letter-spacing: .21em;
   text-shadow: 2px 2px #000;
   color: var(--rdSkyBlue);
 }
