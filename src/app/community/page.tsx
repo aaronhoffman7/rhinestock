@@ -45,7 +45,10 @@ export default function SignUps() {
         action="https://script.google.com/macros/s/AKfycbxB5IBodQ0TYFM8o7tH-VaWp5-ZS23R3XAeXpPhL0Kg3dxT2iFH1_JGFUTdJyrH72Y/exec"
         method="POST"
         target="hidden_iframe"
-        onSubmit={() => alert("Thanks for signing up!")}
+       onSubmit={() => {
+  alert("Thanks for signing up!");
+  setTimeout(() => window.location.reload(), 1000); // delay gives Google Sheet time to update
+}}
       >
         <label>
           Name:<br />
@@ -77,14 +80,15 @@ export default function SignUps() {
       </form>
 
       <hr />
-      <h3>Grilling</h3>
-<ul>
+<h3>Grilling</h3>
+<ul style={{ listStyle: "none", paddingLeft: 0 }}>
   {grillingSignUps.map((s, i) => (
-    <li key={i}>
-      {s.name} — {s.time}
+    <li key={i} style={{ marginBottom: "0.5rem" }}>
+      <strong>{s.name}</strong> — {s.time}
     </li>
   ))}
 </ul>
+
 
 <h3>DJ</h3>
 <ul>
