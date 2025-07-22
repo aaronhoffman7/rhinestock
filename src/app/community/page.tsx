@@ -1,15 +1,43 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePageTitle } from "../context/PageTitleContext";
+
+type SignUp = {
+  timestamp: string;
+  name: string;
+  slotType: "Grilling" | "DJ";
+  time: string;
+};
 
 export default function SignUps() {
   const [, setTitle] = usePageTitle();
+  const [signUps, setSignUps] = useState<SignUp[]>([]);
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj0EmBGAC_I8qjk-rvEqhAwTuO1xA15tnnNBKc47Crps1Vr_-Lpy21eVQDXH0FoRc6klpt0cZ3EvuD/pub?gid=0&single=true&output=csv";
 
   useEffect(() => {
     setTitle("Event Sign Ups");
-  }, [setTitle]);
 
+    // Fetch data from published CSV
+    fetch(CSV_URL)
+      .then((res) => res.text())
+      .then((text) => {
+        const rows = text.split("\n").slice(1); // skip header
+        const parsed = rows
+          .map((row) => row.split(","))
+          .filter((cols) => cols.length >= 4)
+          .map(([timestamp, name, slotType, time]) => ({
+            timestamp,
+            name,
+            slotType: slotType.trim() as "Grilling" | "DJ",
+            time
+          }));
+        setSignUps(parsed);
+      });
+  }, []);
+
+  const grillingSignUps = signUps.filter((s) => s.slotType === "Grilling");
+  const djSignUps = signUps.filter((s) => s.slotType === "DJ");
   return (
     <main>
       <h2>Sign Up for a Slot</h2>
