@@ -18,16 +18,6 @@ export default function HomePage() {
     setTitle("Home");
   }, [setTitle]);
 
-function renderWiggleText(text: string) {
-  return (
-    <>
-      {Array.from(text).map((char, i) => (
-        <span key={i}>{char === " " ? "\u00A0" : char}</span>
-      ))}
-    </>
-  );
-}
-
 
   useEffect(() => {
   const phrases = [
