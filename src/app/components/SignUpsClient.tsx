@@ -34,54 +34,49 @@ const DJ_SLOTS: Record<string, { label: string; capacity: number }> = {
 };
 
 const CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj0EmBGAC_I8qjk-rvEqhAwTuO1xA15tnnNBKc47Crps1Vr_-Lpy21eVQDXH0FoRc6klpt0cZ3EvuD/pub?gid=0&single=true&output=csv";
+  "https://script.google.com/macros/s/AKfycbwEMhCModxmjlHq0qafU-woC-4kFlz1FoxBEi9TYB91UAeZSfa6RSzC5XD31aVLDwAy/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
   const [selectedSlotType, setSelectedSlotType] = useState<"Grilling" | "DJ">("Grilling");
 
   useEffect(() => {
-    fetch(CSV_URL + "&t=" + new Date().getTime(), { cache: "no-store" })
-      .then((res) => res.text())
-      .then((text) => {
-        const rows = text.split("\n").slice(1);
+  fetch(CSV_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then((res) => res.json())
+    .then((data: any[]) => {
+      const parsed = data
+        .map((row: any) => {
+          const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
+          const normalizedSlotType =
+            slotTypeRaw === "grilling"
+              ? "Grilling"
+              : slotTypeRaw === "dj"
+              ? "DJ"
+              : null;
 
-        const parsed = rows
-          .map((row) => row.split(","))
-          .filter((cols) => cols.length >= 4)
-          .map(([timestamp, name, slotTypeRaw, timeRaw]) => {
-            const trimmedSlotType = slotTypeRaw.trim().toLowerCase();
-            const normalizedSlotType =
-              trimmedSlotType === "grilling"
-                ? "Grilling"
-                : trimmedSlotType === "dj"
-                ? "DJ"
-                : null;
+          if (!normalizedSlotType) return null;
 
-            if (!normalizedSlotType) return null;
+          const validSlots =
+            normalizedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
 
-            const validSlots =
-              normalizedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
-            const trimmedTime = timeRaw.trim();
+          const trimmedTime = row["Time"]?.trim();
+          if (!validSlots[trimmedTime]) return null;
 
-if (!validSlots[trimmedTime]) return null;
+          return {
+            timestamp: row["Timestamp"]?.trim(),
+            name: row["Name"]?.trim(),
+            slotType: normalizedSlotType,
+            time: trimmedTime,
+          };
+        })
+        .filter((entry): entry is SignUp => entry !== null);
 
-return {
-  timestamp: timestamp.trim(),
-  name: name.trim(),
-  slotType: normalizedSlotType,
-  time: trimmedTime,
-};
+      setSignUps(parsed);
+      console.log("Live JSON data:", data);
+      console.log("Parsed signups:", parsed);
+    });
+}, []);
 
-          })
-          .filter((entry): entry is SignUp => entry !== null);
-
-        setSignUps(parsed);
-        console.log("Raw CSV text:", text);
-        console.log("Parsed signups:", parsed);
-        console.log("Rows after split:", rows);
-      });
-  }, []);
 
   const SLOT_CONFIG =
     selectedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
