@@ -14,7 +14,7 @@ export default function SignUps() {
     <main>
       <h2>Sign Up for a Slot</h2>
       <form
-        action="https://script.google.com/macros/s/AKfycbxEWFpJNjvzoyuAXC1lglMNoDBOCMLcHTKm0orazuLlJ9ExK5GiiH82c16wfVHombc/exec"
+        action="https://script.google.com/macros/s/AKfycbxB5IBodQ0TYFM8o7tH-VaWp5-ZS23R3XAeXpPhL0Kg3dxT2iFH1_JGFUTdJyrH72Y/exec"
         method="POST"
         target="hidden_iframe"
         onSubmit={() => alert("Thanks for signing up!")}
