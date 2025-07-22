@@ -113,7 +113,7 @@ export default function HomePage() {
 
           <section className="support-map-section">
             <div className="map-title">
-              <h2>Where we at</h2>
+              <h3>Where we at:</h3>
             </div>
             <div className="map-wrapper">
               <iframe

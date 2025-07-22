@@ -1,5 +1,5 @@
-@import url('https://fonts.cdnfonts.com/css/titania');
-@import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barrio&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap');
 
 :root {
   --rdmustard: #fad378;
@@ -12,8 +12,8 @@
   --rdButtonColor: #ff0077;
 
    /* Font families */
-  --headerFont: 'Titania', serif;
-  --bodyFont: 'Alice', serif;
+  --headerFont: 'Barrio', system-ui;
+  --bodyFont: 'Unkempt', system-ui;
 }
 
 
@@ -71,6 +71,7 @@ nav a {
   transition: all 0.6s ease;
   z-index: 2;
   position: relative;
+  letter-spacing: .1em;
 }
 
 nav a:hover {
@@ -125,8 +126,8 @@ form textarea {
 }
 
 button {
-  background: var(--rdPurpleThree);
-  color: var(--rdSkyBlue);
+  background: var(--rdPurpleDark);
+  color: var(--rdlavender);
   padding: 0.7em 1.5em;
   border: none;
   margin-top: 1em;
@@ -152,11 +153,11 @@ h2 {
 
 
 h3 {
-  font-size: 25px;
+  font-size: 35px;
   margin: 0px;
   font-family: var(--headerFont);
   line-height: 1; 
-  color: var(--rdSkyBlue);
+  color: var(--rdPurpleDark);
   position: relative;
   z-index: 2; 
 }
@@ -172,7 +173,7 @@ h4 {
 }
 
 p {
-  font-size: 20px;
+  font-size: 28px;
   font-family: var(--bodyFont) ;
   position: relative;
   z-index: 2;
@@ -277,7 +278,7 @@ p {
   font-weight: bold;
   color: var(--rdPurpleDark);
   margin-bottom: 1rem;
-  z-index: 2;
+  z-index: 5;
 }
 
 .map-embed {
@@ -325,7 +326,7 @@ p {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: -1; /* not too negative */
+  z-index: 1; /* not too negative */
   overflow: hidden;
 }
 
@@ -416,7 +417,7 @@ p {
   margin-top: 3rem;
   text-align: center;
   padding: 0 1rem;
-  z-index: -1;
+  z-index: 0;
 }
 
 .support-map-row {
@@ -428,9 +429,13 @@ p {
   margin-top: -2rem;
 }
 
+.map-title {
+  margin-bottom: 1.5rem; /* or more */
+}
+
 
 .tagline span {
-  font-family: var(--bodyFont);
+  font-family: var(--headerFont);
   color: var(--rdforestgreenn);
   text-shadow: 1px 1px #000;
   letter-spacing: 2.25px;
@@ -440,10 +445,11 @@ p {
   font-size: 2.5rem;
   display: block;
   text-align: center;
+  margin-bottom: -1em;
 }
 
 .tagline .line-small {
-  font-size: 1.75rem;
+  font-size: 2rem;
   display: block;
   text-align: center;
 }
@@ -480,7 +486,7 @@ p {
 }
 
 .signup-day {
-  margin-bottom: 1rem;
+  margin-bottom: .1rem;
   z-index: 0;
   font-size: 1rem;
 }
