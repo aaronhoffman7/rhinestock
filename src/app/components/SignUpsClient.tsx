@@ -150,7 +150,7 @@ export default function SignUpsClient() {
       <div style={{ maxWidth: "700px", margin: "0 auto", padding: "1rem" }}>
         <h2>Sign Up for a Slot</h2>
         <form
-          action="https://script.google.com/macros/s/AKfycbxB5IBodQ0TYFM8o7tH-VaWp5-ZS23R3XAeXpPhL0Kg3dxT2iFH1_JGFUTdJyrH72Y/exec"
+          action="https://script.google.com/macros/s/AKfycbxPY05vXtt02iunZtgeKeRoBsR1A6h2SFwPPBIZqG61PknkolvfTlQ2pbegLigR61z6/exec"
           method="POST"
           target="hidden_iframe"
           onSubmit={() => {
