@@ -1,31 +1,98 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePageTitle } from "../context/PageTitleContext";
 
-export default function CommunityPage() {
+type SignUp = {
+  name: string;
+  slotType: "Grilling" | "DJ";
+  time: string;
+};
+
+const availableSlots = {
+  Grilling: [
+    "12:00 – 12:30 PM",
+    "12:30 – 1:00 PM",
+    "1:00 – 1:30 PM",
+    "1:30 – 2:00 PM"
+  ],
+  DJ: [
+    "2:00 – 2:30 PM",
+    "2:30 – 3:00 PM",
+    "3:00 – 3:30 PM",
+    "3:30 – 4:00 PM"
+  ]
+};
+
+export default function SignUps() {
   const [, setTitle] = usePageTitle();
+  const [signUps, setSignUps] = useState<SignUp[]>([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    slotType: "Grilling" as "Grilling" | "DJ",
+    time: ""
+  });
 
   useEffect(() => {
-    setTitle("Community Resources");
+    setTitle("Event Sign Ups");
   }, [setTitle]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.time) return;
+
+    setSignUps((prev) => [...prev, formData]);
+    setFormData({ name: "", slotType: "Grilling", time: "" });
+  };
+
+  const takenTimes = signUps.map((s) => s.time);
+
   return (
-    <>
-      <main>
-        <h2>Things to Know</h2>
-        <p>ReDelicious is rooted in community care and collective learning. Here are some of the resources, guides, and local organizations that inform our work, and may support yours.</p>  
-        <h2>Suggest a Resource</h2>
-        <p>Know a resource that should be here? Send us your suggestions!</p>
-        <form action="https://formspree.io/f/myzjbela" method="POST">
-          <label>Name:<br /><input type="text" name="name" required /></label><br /><br />
-          <label>Email:<br /><input type="email" name="email" required /></label><br /><br />
-          <label>Resource Suggestion:<br />
-            <textarea name="message" rows={5} required></textarea>
-          </label><br /><br />
-          <button type="submit">Submit</button>
-        </form>
-      </main>
-    </>
+    <main>
+      <h2>Sign Up for a Slot</h2>
+      <form action="https://script.google.com/macros/s/AKfycbxEWFpJNjvzoyuAXC1lglMNoDBOCMLcHTKm0orazuLlJ9ExK5GiiH82c16wfVHombc/exec" method="POST" target="hidden_iframe" onSubmit={() => alert("Thanks for signing up!")}>
+  <label>
+    Name:<br />
+    <input type="text" name="name" required />
+  </label><br /><br />
+
+  <label>
+    Slot Type:<br />
+    <select name="slotType" required>
+      <option value="Grilling">Grilling</option>
+      <option value="DJ">DJ</option>
+    </select>
+  </label><br /><br />
+
+  <label>
+    Time:<br />
+    <select name="time" required>
+      <option value="12:00 – 12:30 PM">12:00 – 12:30 PM</option>
+      <option value="12:30 – 1:00 PM">12:30 – 1:00 PM</option>
+      <option value="1:00 – 1:30 PM">1:00 – 1:30 PM</option>
+      <option value="1:30 – 2:00 PM">1:30 – 2:00 PM</option>
+      <option value="2:00 – 2:30 PM">2:00 – 2:30 PM</option>
+      <option value="2:30 – 3:00 PM">2:30 – 3:00 PM</option>
+    </select>
+  </label><br /><br />
+
+  <button type="submit">Sign Up</button>
+  <iframe name="hidden_iframe" style={{ display: "none" }}></iframe>
+</form>
+
+
+      <hr />
+
+      <h2>Current Sign Ups</h2>
+      {signUps.length === 0 && <p>No sign-ups yet. Be the first!</p>}
+      <ul>
+        {signUps.map((s, i) => (
+          <li key={i}>
+            <strong>{s.name}</strong> signed up for <em>{s.slotType}</em> at <strong>{s.time}</strong>
+          </li>
+        ))}
+      </ul>
+    </main>
   );
 }
