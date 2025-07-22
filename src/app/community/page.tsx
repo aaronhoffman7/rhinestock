@@ -69,7 +69,6 @@ export default function SignUps() {
   }, [setTitle]);
 
   const SLOT_CONFIG = selectedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
-  const TIME_SLOTS = Object.keys(SLOT_CONFIG);
 
   const takenCount: Record<string, number> = {};
   signUps
