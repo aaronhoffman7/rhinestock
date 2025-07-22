@@ -53,29 +53,38 @@ export default function SignUps() {
       const parsed = rows
         .map((row) => row.split(","))
         .filter((cols) => cols.length >= 4)
-        .map(([timestamp, name, slotType, time]) => {
-          const trimmedSlotType = slotType.trim() as "Grilling" | "DJ";
-          const validSlots = trimmedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+        .map(([timestamp, name, slotTypeRaw, timeRaw]) => {
+          const trimmedSlotType = slotTypeRaw.trim().toLowerCase();
+          const normalizedSlotType = 
+            trimmedSlotType === "grilling" ? "Grilling" : 
+            trimmedSlotType === "dj" ? "DJ" : null;
 
-          // Try to find the key from the label
+          if (!normalizedSlotType) return null;
+
+          const validSlots = normalizedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+          const trimmedTime = timeRaw.trim();
+
+          // Look for key where label matches time text (case-insensitive)
           const timeKey = Object.entries(validSlots).find(
-            ([, slot]) => slot.label === time.trim()
+            ([, slot]) =>
+              slot.label.trim().toLowerCase() === trimmedTime.toLowerCase()
           )?.[0];
 
-          if (!timeKey) return null; // invalid entry
+          if (!timeKey) return null;
 
           return {
-            timestamp,
+            timestamp: timestamp.trim(),
             name: name.trim(),
-            slotType: trimmedSlotType,
-            time: timeKey, // replace with internal key
+            slotType: normalizedSlotType,
+            time: timeKey,
           };
         })
-        .filter((entry): entry is SignUp => entry !== null); // filter out nulls
+        .filter((entry): entry is SignUp => entry !== null);
 
       setSignUps(parsed);
     });
 }, [setTitle]);
+
 
 
   const SLOT_CONFIG = selectedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
