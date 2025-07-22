@@ -78,10 +78,6 @@ export default function SignUps() {
       takenCount[s.time] = (takenCount[s.time] || 0) + 1;
     });
 
-  const availableTimes = TIME_SLOTS.filter(
-    (slot) => (takenCount[slot] || 0) < SLOT_CONFIG[slot].capacity
-  );
-
   const groupedByType = {
     Grilling: {} as Record<string, string[]>,
     DJ: {} as Record<string, string[]>,
