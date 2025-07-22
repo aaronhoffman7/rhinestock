@@ -82,6 +82,7 @@ export default function SignUpsClient() {
           .filter((entry): entry is SignUp => entry !== null);
 
         setSignUps(parsed);
+        console.log("Parsed signups:", parsed);
       });
   }, []);
 
