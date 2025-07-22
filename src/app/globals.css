@@ -73,21 +73,29 @@ h1 {
   margin-bottom: .5em;
 }
 
-
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+  text-align: center;
+}
 
 nav a {
-  margin: 0 2em;
+  margin: 0 1em;
   color: var(--rdlavender);
   text-decoration: none;
   font-weight: bold;
-  font-size: 28px;
+  font-size: 1.3rem;
   transition: all 0.6s ease;
   z-index: 2;
   position: relative;
-  letter-spacing: .1em;
-  justify-content: center; /* centers links horizontally */
-  flex-wrap: wrap;
-  width: 100%;
+  letter-spacing: 0.1em;
+  display: inline-block; /* Helps maintain block context */
 }
 
 nav a:hover {
