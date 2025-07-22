@@ -82,7 +82,9 @@ export default function SignUpsClient() {
           .filter((entry): entry is SignUp => entry !== null);
 
         setSignUps(parsed);
+        console.log("Raw CSV text:", text);
         console.log("Parsed signups:", parsed);
+        console.log("Rows after split:", rows);
       });
   }, []);
 
