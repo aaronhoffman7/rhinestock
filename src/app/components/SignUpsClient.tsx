@@ -64,20 +64,15 @@ export default function SignUpsClient() {
               normalizedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
             const trimmedTime = timeRaw.trim();
 
-            const timeKey = Object.entries(validSlots).find(
-              ([, slot]) =>
-                slot.label.trim().toLowerCase() ===
-                trimmedTime.toLowerCase()
-            )?.[0];
+if (!validSlots[trimmedTime]) return null;
 
-            if (!timeKey) return null;
+return {
+  timestamp: timestamp.trim(),
+  name: name.trim(),
+  slotType: normalizedSlotType,
+  time: trimmedTime,
+};
 
-            return {
-              timestamp: timestamp.trim(),
-              name: name.trim(),
-              slotType: normalizedSlotType,
-              time: timeKey,
-            };
           })
           .filter((entry): entry is SignUp => entry !== null);
 
