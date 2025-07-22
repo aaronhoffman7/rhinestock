@@ -156,7 +156,7 @@ export default function SignUpsClient() {
           target="hidden_iframe"
           onSubmit={() => {
   alert("Thanks for signing up! The page will refresh in a few seconds.");
-  setTimeout(() => window.location.reload(), 3000); // 3 seconds minimum
+  setTimeout(() => window.location.reload(), 500); // 3 seconds minimum
 }}
         >
           <label>
