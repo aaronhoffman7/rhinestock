@@ -29,25 +29,26 @@ export default function SignUps() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
   const [selectedSlotType, setSelectedSlotType] = useState<"Grilling" | "DJ">("Grilling");
 
-  useEffect(() => {
-    setTitle("Event Sign Ups");
+useEffect(() => {
+  setTitle("Event Sign Ups");
 
-    fetch(CSV_URL + "&t=" + new Date().getTime())
-      .then((res) => res.text())
-      .then((text) => {
-        const rows = text.split("\n").slice(1);
-        const parsed = rows
-          .map((row) => row.split(","))
-          .filter((cols) => cols.length >= 4)
-          .map(([timestamp, name, slotType, time]) => ({
-            timestamp,
-            name: name.trim(),
-            slotType: slotType.trim() as "Grilling" | "DJ",
-            time: time.trim()
-          }));
-        setSignUps(parsed);
-      });
-  }, []);
+  fetch(CSV_URL + "&t=" + new Date().getTime())
+    .then((res) => res.text())
+    .then((text) => {
+      const rows = text.split("\n").slice(1);
+      const parsed = rows
+        .map((row) => row.split(","))
+        .filter((cols) => cols.length >= 4)
+        .map(([timestamp, name, slotType, time]) => ({
+          timestamp,
+          name: name.trim(),
+          slotType: slotType.trim() as "Grilling" | "DJ",
+          time: time.trim()
+        }));
+      setSignUps(parsed);
+    });
+}, [setTitle]); // ✅ correct dependency array
+
 
   // helper: group by day
   function groupByDay(entries: SignUp[]) {
@@ -138,7 +139,6 @@ export default function SignUps() {
           <ul>
             {entries.map((s, i) => {
   const parts = s.time.split(",");
-  const dayPart = parts[0];
   const timePart = parts[1] ? parts[1].trim() : "";
   return (
     <li key={i}>
@@ -157,7 +157,6 @@ export default function SignUps() {
           <ul>
             {entries.map((s, i) => {
   const parts = s.time.split(",");
-  const dayPart = parts[0];
   const timePart = parts[1] ? parts[1].trim() : "";
   return (
     <li key={i}>
