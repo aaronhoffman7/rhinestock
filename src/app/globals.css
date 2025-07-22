@@ -267,11 +267,10 @@ p {
 .map-column {
   display: flex;
   flex-direction: column;
-  align-items: center; /* center everything instead of flex-end */
+  align-items: center;
   gap: 1rem;
   margin-top: 2rem;
 }
-
 .map-callout {
   text-align: center;
   font-size: 1.2rem;
@@ -281,19 +280,24 @@ p {
   z-index: 5;
 }
 
-.map-embed {
+.map-wrapper {
+  position: relative;
   width: 100%;
-  max-width: 700px; /* ⬅️ Limit size on large screens */
+  max-width: 1800px;       /* ⬅️ widen the map on large screens */
   margin: 0 auto;
-}
-
-.map-embed iframe {
-  width: 100%;
-  height: 250px; /* or adjust to your needs */
-  border: none;
+  padding-top: 25%;        /* ⬅️ shorter aspect ratio (was 56.25%) */
   border-radius: 12px;
+  overflow: hidden;
 }
 
+.map-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
 
 .interest-section {
   max-width: 1800px;
@@ -503,4 +507,134 @@ p {
   color: #37053e;
   margin-left: 0.5rem;
   font-style: italic;
+}
+
+/* -------------------------------
+   RESPONSIVE ENHANCEMENTS (Mobile + Tablet)
+--------------------------------*/
+
+@media (max-width: 1024px) {
+  .dual-column {
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .signup-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .tagline .line-large {
+    font-size: 2rem;
+  }
+
+  .tagline .line-small {
+    font-size: 1.5rem;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  main,
+  .info-row,
+  .text-column,
+  .support-map-section {
+    padding: 1rem;
+  }
+
+  .dual-column {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+
+  .signup-column {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .slideshow-container {
+    height: 30vh;
+  }
+
+  .tagline .line-large {
+    font-size: 1.75rem;
+  }
+
+  .tagline .line-small {
+    font-size: 1.25rem;
+  }
+
+  .map-wrapper {
+    padding-top: 45%; /* shorter map on mobile */
+  }
+
+  .map-embed iframe {
+    height: auto;
+    min-height: 200px;
+  }
+
+  nav a {
+    font-size: 18px;
+    margin: 0 0.75em;
+  }
+
+  .name-list,
+  .slot-line {
+    font-size: 1rem;
+  }
+
+  h3, h4 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tagline .line-large {
+    font-size: 1.5rem;
+  }
+
+  .tagline .line-small {
+    font-size: 1.1rem;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  nav a {
+    font-size: 16px;
+    margin: 0 0.5em;
+  }
+
+  .slot-line {
+    font-size: 0.95rem;
+  }
+
+  .signup-column {
+    padding: 0.75rem;
+  }
+
+  .form-container {
+    border-width: 4px;
+  }
+
+  .map-wrapper {
+    padding-top: 50%;
+  }
 }
