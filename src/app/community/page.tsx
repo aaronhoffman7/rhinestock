@@ -77,10 +77,23 @@ export default function SignUps() {
       </form>
 
       <hr />
-      <h2>Current Sign Ups</h2>
-      <p>
-        View the latest sign-ups <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit?usp=sharing" target="_blank" rel="noopener noreferrer">in the Google Sheet</a>.
-      </p>
+      <h3>Grilling</h3>
+<ul>
+  {grillingSignUps.map((s, i) => (
+    <li key={i}>
+      {s.name} — {s.time}
+    </li>
+  ))}
+</ul>
+
+<h3>DJ</h3>
+<ul>
+  {djSignUps.map((s, i) => (
+    <li key={i}>
+      {s.name} — {s.time}
+    </li>
+  ))}
+</ul>
     </main>
   );
 }
