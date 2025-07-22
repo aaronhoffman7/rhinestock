@@ -41,7 +41,7 @@ export default function SignUpsClient() {
   const [selectedSlotType, setSelectedSlotType] = useState<"Grilling" | "DJ">("Grilling");
 
   useEffect(() => {
-    fetch(CSV_URL + "&t=" + new Date().getTime())
+    fetch(CSV_URL + "&t=" + new Date().getTime(), { cache: "no-store" })
       .then((res) => res.text())
       .then((text) => {
         const rows = text.split("\n").slice(1);
