@@ -97,7 +97,7 @@ export default function SignUps() {
     <>
       <h2>{title}</h2>
       {["Friday", "Saturday", "Sunday"].map((day) => {
-        const slots = Object.entries(slotMap).filter(([_, val]) =>
+        const slots = Object.entries(slotMap).filter(([, val]) =>
           val.label.startsWith(day)
         );
 
