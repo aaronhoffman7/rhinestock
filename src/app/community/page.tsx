@@ -136,11 +136,16 @@ export default function SignUps() {
         <div key={day}>
           <h3>{day}</h3>
           <ul>
-            {entries.map((s, i) => (
-              <li key={i}>
-                <strong>{s.name}</strong> — {s.time.split(",")[1].trim()}
-              </li>
-            ))}
+            {entries.map((s, i) => {
+  const parts = s.time.split(",");
+  const dayPart = parts[0];
+  const timePart = parts[1] ? parts[1].trim() : "";
+  return (
+    <li key={i}>
+      <strong>{s.name}</strong> — {timePart}
+    </li>
+  );
+})}
           </ul>
         </div>
       ))}
@@ -150,11 +155,16 @@ export default function SignUps() {
         <div key={day}>
           <h3>{day}</h3>
           <ul>
-            {entries.map((s, i) => (
-              <li key={i}>
-                <strong>{s.name}</strong> — {s.time.split(",")[1].trim()}
-              </li>
-            ))}
+            {entries.map((s, i) => {
+  const parts = s.time.split(",");
+  const dayPart = parts[0];
+  const timePart = parts[1] ? parts[1].trim() : "";
+  return (
+    <li key={i}>
+      <strong>{s.name}</strong> — {timePart}
+    </li>
+  );
+})}
           </ul>
         </div>
       ))}
