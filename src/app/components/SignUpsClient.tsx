@@ -16,111 +16,108 @@ type RawSignUpRow = {
   Time: string;
 };
 
-
-const GRILL_SLOTS: Record<string, { label: string; capacity: number }> = {
-  friday_6pm: { label: "Friday, 6:00 PM", capacity: 1 },
-  saturday_5pm: { label: "Saturday, 5:00 PM", capacity: 4 },
-  saturday_6pm: { label: "Saturday, 6:00 PM", capacity: 4 },
-  sunday_2pm: { label: "Sunday, 2:00 PM", capacity: 1 },
+type SlotEntry = {
+  label: string;
+  capacity: number;
+  day: "Friday" | "Saturday" | "Sunday";
 };
 
-const DJ_SLOTS: Record<string, { label: string; capacity: number }> = {
-  friday_10pm: { label: "Friday night, 10:00 PM", capacity: 2 },
-  friday_11pm: { label: "Friday night, 11:00 PM", capacity: 2 },
-  friday_12pm: { label: "Friday, 12:00 PM", capacity: 2 },
-  friday_1am: { label: "Friday, 1:00 AM", capacity: 2 },
-  friday_2am: { label: "Friday latenight, 2:00 AM", capacity: 2 },
-  friday_3am: { label: "Friday latenight, 3:00 AM", capacity: 2 },
-  saturday_sunset: { label: "Saturday Sunset Sessions, 6:30 PM", capacity: 2 },
-  saturday_10pm: { label: "Saturday night, 10:00 PM", capacity: 2 },
-  saturday_11pm: { label: "Saturday night, 11:00 PM", capacity: 2 },
-  saturday_12am: { label: "Saturday night, 12:00 AM", capacity: 2 },
-  saturday_1am: { label: "Saturday, 1:00 AM", capacity: 2 },
-  saturday_2am: { label: "Saturday, 2:00 AM", capacity: 2 },
-  saturday_3am: { label: "Saturday, 3:00 AM", capacity: 2 },
-  sunday_930am: { label: "Sunday, 9:30 AM", capacity: 1 },
+type SlotMap = Record<string, SlotEntry>;
+
+
+
+const GRILL_SLOTS: SlotMap = {
+  friday_6pm:    { day: "Friday", label: "6:00 PM", capacity: 1 },
+  saturday_5pm:  { day: "Saturday", label: "5:00 PM", capacity: 4 },
+  saturday_6pm:  { day: "Saturday", label: "6:00 PM", capacity: 4 },
+  sunday_2pm:    { day: "Sunday", label: "2:00 PM", capacity: 1 },
 };
 
-const DRIVER_SLOTS: Record<string, { label: string; capacity: number }> = {
-  from_dc_fri: { label: "Friday - Leaving from DC", capacity: 4 },
-  to_dc_sun: { label: "Sunday - Returning to DC", capacity: 4 },
+const DJ_SLOTS: SlotMap = {
+  friday_10pm:       { day: "Friday", label: "10:00 PM", capacity: 2 },
+  friday_11pm:       { day: "Friday", label: "11:00 PM", capacity: 2 },
+  friday_12pm:       { day: "Friday", label: "12:00 PM", capacity: 2 },
+  friday_1am:        { day: "Friday", label: "1:00 AM", capacity: 2 },
+  friday_2am:        { day: "Friday", label: "2:00 AM (late night)", capacity: 2 },
+  friday_3am:        { day: "Friday", label: "3:00 AM (late night)", capacity: 2 },
+  saturday_sunset:   { day: "Saturday", label: "Sunset Sessions – 6:30 PM", capacity: 2 },
+  saturday_10pm:     { day: "Saturday", label: "10:00 PM", capacity: 2 },
+  saturday_11pm:     { day: "Saturday", label: "11:00 PM", capacity: 2 },
+  saturday_12am:     { day: "Saturday", label: "12:00 AM", capacity: 2 },
+  saturday_1am:      { day: "Saturday", label: "1:00 AM", capacity: 2 },
+  saturday_2am:      { day: "Saturday", label: "2:00 AM", capacity: 2 },
+  saturday_3am:      { day: "Saturday", label: "3:00 AM", capacity: 2 },
+  sunday_930am:      { day: "Sunday", label: "9:30 AM", capacity: 1 },
 };
 
-const RIDER_SLOTS: Record<string, { label: string; capacity: number }> = {
-  from_dc_fri: { label: "Friday - Ride from DC", capacity: 10 },
-  to_dc_sun: { label: "Sunday - Ride back to DC", capacity: 10 },
+const DRIVER_SLOTS: SlotMap = {
+  from_dc_fri: { day: "Friday", label: "Leaving from DC", capacity: 4 },
+  to_dc_sun:   { day: "Sunday", label: "Returning to DC", capacity: 4 },
 };
 
-const ACTIVITY_SLOTS: Record<string, { label: string; capacity: number }> = {
-  saturday_afternoon: { label: "Saturday Afternoon Workshop", capacity: 3 },
-  sunday_morning: { label: "Sunday Morning Activity", capacity: 2 },
+const RIDER_SLOTS: SlotMap = {
+  from_dc_fri: { day: "Friday", label: "Ride from DC", capacity: 10 },
+  to_dc_sun:   { day: "Sunday", label: "Ride back to DC", capacity: 10 },
+};
+
+const ACTIVITY_SLOTS: SlotMap = {
+  saturday_afternoon: { day: "Saturday", label: "Afternoon Workshop", capacity: 3 },
+  sunday_morning:     { day: "Sunday", label: "Morning Activity", capacity: 2 },
 };
 
 
-const CSV_URL =
-  "https://script.google.com/macros/s/AKfycbwEMhCModxmjlHq0qafU-woC-4kFlz1FoxBEi9TYB91UAeZSfa6RSzC5XD31aVLDwAy/exec";
+const CSV_URL = "https://script.google.com/macros/s/AKfycbwEMhCModxmjlHq0qafU-woC-4kFlz1FoxBEi9TYB91UAeZSfa6RSzC5XD31aVLDwAy/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
   const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
 
   useEffect(() => {
-  fetch(CSV_URL + "?t=" + Date.now(), { cache: "no-store" })
-    .then((res) => res.json())
-    .then((data: RawSignUpRow[]) => {
-      const parsed = data
-        .map((row) => {
-          const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
-          const normalizedSlotType =
-  slotTypeRaw === "grilling"
-    ? "Grilling"
-    : slotTypeRaw === "dj"
-    ? "DJ"
-    : slotTypeRaw === "driver"
-    ? "Driver"
-    : slotTypeRaw === "rider"
-    ? "Rider"
-    : slotTypeRaw === "activity"
-    ? "Activity"
-    : null;
+    fetch(CSV_URL + "?t=" + Date.now(), { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data: RawSignUpRow[]) => {
+        const parsed = data
+          .map((row) => {
+            const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
+            const normalizedSlotType =
+              slotTypeRaw === "grilling" ? "Grilling" :
+              slotTypeRaw === "dj" ? "DJ" :
+              slotTypeRaw === "driver" ? "Driver" :
+              slotTypeRaw === "rider" ? "Rider" :
+              slotTypeRaw === "activity" ? "Activity" :
+              null;
 
+            if (!normalizedSlotType) return null;
 
-          if (!normalizedSlotType) return null;
+            const slotMap =
+              normalizedSlotType === "Grilling" ? GRILL_SLOTS :
+              normalizedSlotType === "DJ" ? DJ_SLOTS :
+              normalizedSlotType === "Driver" ? DRIVER_SLOTS :
+              normalizedSlotType === "Rider" ? RIDER_SLOTS :
+              ACTIVITY_SLOTS;
 
-          const validSlots =
-  normalizedSlotType === "Grilling" ? GRILL_SLOTS :
-  normalizedSlotType === "DJ" ? DJ_SLOTS :
-  normalizedSlotType === "Driver" ? DRIVER_SLOTS :
-  normalizedSlotType === "Rider" ? RIDER_SLOTS :
- ACTIVITY_SLOTS;
+            const trimmedTime = row["Time"]?.trim();
+            if (!slotMap[trimmedTime]) return null;
 
+            return {
+              timestamp: row["Timestamp"]?.trim(),
+              name: row["Name"]?.trim(),
+              slotType: normalizedSlotType,
+              time: trimmedTime,
+            };
+          })
+          .filter((entry): entry is SignUp => entry !== null);
 
-          const trimmedTime = row["Time"]?.trim();
-          if (!validSlots[trimmedTime]) return null;
+        setSignUps(parsed);
+      });
+  }, []);
 
-          return {
-            timestamp: row["Timestamp"]?.trim(),
-            name: row["Name"]?.trim(),
-            slotType: normalizedSlotType,
-            time: trimmedTime,
-          };
-        })
-        .filter((entry): entry is SignUp => entry !== null);
-
-      setSignUps(parsed);
-      console.log("Live JSON data:", data);
-      console.log("Parsed signups:", parsed);
-    });
-}, []);
-
-
-const SLOT_CONFIG =
-  selectedSlotType === "Grilling" ? GRILL_SLOTS :
-  selectedSlotType === "DJ" ? DJ_SLOTS :
-  selectedSlotType === "Driver" ? DRIVER_SLOTS :
-  selectedSlotType === "Rider" ? RIDER_SLOTS :
-  ACTIVITY_SLOTS;
-
+  const SLOT_CONFIG =
+    selectedSlotType === "Grilling" ? GRILL_SLOTS :
+    selectedSlotType === "DJ" ? DJ_SLOTS :
+    selectedSlotType === "Driver" ? DRIVER_SLOTS :
+    selectedSlotType === "Rider" ? RIDER_SLOTS :
+    ACTIVITY_SLOTS;
 
   const takenCount: Record<string, number> = {};
   signUps
@@ -129,104 +126,68 @@ const SLOT_CONFIG =
       takenCount[s.time] = (takenCount[s.time] || 0) + 1;
     });
 
-const groupedByType = {
-  Grilling: {} as Record<string, string[]>,
-  DJ: {} as Record<string, string[]>,
-  Driver: {} as Record<string, string[]>,
-  Rider: {} as Record<string, string[]>,
-  Activity: {} as Record<string, string[]>,
-};
+  const groupedByType: Record<SignUp["slotType"], Record<string, string[]>> = {
+    Grilling: {},
+    DJ: {},
+    Driver: {},
+    Rider: {},
+    Activity: {},
+  };
 
+  const allSlotMaps = {
+    Grilling: GRILL_SLOTS,
+    DJ: DJ_SLOTS,
+    Driver: DRIVER_SLOTS,
+    Rider: RIDER_SLOTS,
+    Activity: ACTIVITY_SLOTS,
+  };
 
-  for (const slot of Object.keys(GRILL_SLOTS)) groupedByType.Grilling[slot] = [];
-for (const slot of Object.keys(DJ_SLOTS)) groupedByType.DJ[slot] = [];
-for (const slot of Object.keys(DRIVER_SLOTS)) groupedByType.Driver[slot] = [];
-for (const slot of Object.keys(RIDER_SLOTS)) groupedByType.Rider[slot] = [];
-for (const slot of Object.keys(ACTIVITY_SLOTS)) groupedByType.Activity[slot] = [];
-
+  for (const type in allSlotMaps) {
+    for (const key in allSlotMaps[type as SignUp["slotType"]]) {
+      groupedByType[type as SignUp["slotType"]][key] = [];
+    }
+  }
 
   for (const s of signUps) {
     groupedByType[s.slotType][s.time].push(s.name);
   }
 
-  const renderSchedule = (
-    slotMap: Record<string, { label: string; capacity: number }>,
-    grouped: Record<string, string[]>,
-    title: string
-  ) => (
-    <>
-      <h2>{title}</h2>
-      {["Friday", "Saturday", "Sunday"].map((day) => {
-        const slots = Object.entries(slotMap).filter(([, val]) =>
-          val.label.startsWith(day)
-        );
-
-        return (
-          <div key={day} style={{ marginBottom: "2rem", textAlign: "left" }}>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>{day}</h3>
-            <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
-              {slots.map(([key, slot]) => {
-                const names = grouped[key] || [];
-                return (
-                  <li
-                    key={key}
-                    style={{
-                      fontSize: "1rem",
-                      color: "forestgreen",
-                      marginBottom: "0.4rem",
-                    }}
-                  >
-                    {slot.label} — {names.join(", ")}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        );
-      })}
-    </>
-  );
-
   return (
     <main>
-      <div style={{ maxWidth: "700px", margin: "0 auto", padding: "1rem" }}>
+      <div style={{ maxWidth: "100%", margin: "0 auto", padding: "1rem" }}>
         <h2>Sign Up for something helpful or burdensome</h2>
         <form
           action="https://script.google.com/macros/s/AKfycbxPY05vXtt02iunZtgeKeRoBsR1A6h2SFwPPBIZqG61PknkolvfTlQ2pbegLigR61z6/exec"
           method="POST"
           target="hidden_iframe"
           onSubmit={() => {
-  alert("Thanks for signing up! The page will refresh in a few seconds.");
-  setTimeout(() => window.location.reload(), 500); // 3 seconds minimum
-}}
+            alert("Thanks for signing up! The page will refresh shortly.");
+            setTimeout(() => window.location.reload(), 500);
+          }}
         >
           <label>
             Name:<br />
             <input type="text" name="name" required />
           </label>
-          <br />
-          <br />
+          <br /><br />
 
           <label>
             Sign up type:<br />
             <select
-  value={selectedSlotType}
-  onChange={(e) =>
-    setSelectedSlotType(
-      e.target.value as SignUp["slotType"]
-    )
-  }
-  required
->
-  <option value="Grilling">Grilling</option>
-  <option value="DJ">DJ</option>
-  <option value="Driver">Carpool Driver</option>
-  <option value="Rider">Carpool Rider</option>
-  <option value="Activity">Activity Host</option>
-</select>
+              value={selectedSlotType}
+              onChange={(e) =>
+                setSelectedSlotType(e.target.value as SignUp["slotType"])
+              }
+              required
+            >
+              <option value="Grilling">Grilling</option>
+              <option value="DJ">DJ</option>
+              <option value="Driver">Carpool Driver</option>
+              <option value="Rider">Carpool Rider</option>
+              <option value="Activity">Activity Host</option>
+            </select>
           </label>
-          <br />
-          <br />
+          <br /><br />
 
           <input type="hidden" name="slotType" value={selectedSlotType} />
 
@@ -235,19 +196,15 @@ for (const slot of Object.keys(ACTIVITY_SLOTS)) groupedByType.Activity[slot] = [
             <select name="time" required>
               <option value="">-- Select a Time Slot --</option>
               {Object.entries(SLOT_CONFIG)
-                .filter(
-                  ([key]) =>
-                    (takenCount[key] || 0) < SLOT_CONFIG[key].capacity
-                )
-                .map(([key, { label }]) => (
-                  <option key={key} value={key}>
-                    {label}
-                  </option>
-                ))}
+                .filter(([key]) => (takenCount[key] || 0) < SLOT_CONFIG[key].capacity)
+  .map(([key, entry]) => (
+    <option key={key} value={key}>
+      {entry.day} – {entry.label}
+    </option>
+  ))}
             </select>
           </label>
-          <br />
-          <br />
+          <br /><br />
 
           <button type="submit">Sign Up</button>
           <iframe name="hidden_iframe" style={{ display: "none" }}></iframe>
@@ -255,13 +212,55 @@ for (const slot of Object.keys(ACTIVITY_SLOTS)) groupedByType.Activity[slot] = [
 
         <hr style={{ margin: "2rem 0" }} />
 
-        {renderSchedule(GRILL_SLOTS, groupedByType.Grilling, "Grilling Signups")}
-        {renderSchedule(DJ_SLOTS, groupedByType.DJ, "DJ Lineup")}
-        {renderSchedule(DRIVER_SLOTS, groupedByType.Driver, "Carpool Drivers")}
-{renderSchedule(RIDER_SLOTS, groupedByType.Rider, "Carpool Riders")}
-{renderSchedule(ACTIVITY_SLOTS, groupedByType.Activity, "Workshops & Activities")}
+        <div className="dual-column">
+          {renderColumn(GRILL_SLOTS, groupedByType.Grilling, "Grilling slots")}
+          {renderColumn(DJ_SLOTS, groupedByType.DJ, "Musician + DJ Lineup")}
+        </div>
 
+        <div className="dual-column">
+          {renderColumn(DRIVER_SLOTS, groupedByType.Driver, "Carpool Drivers")}
+          {renderColumn(RIDER_SLOTS, groupedByType.Rider, "Carpool Riders")}
+        </div>
+
+        <div className="dual-column">
+          {renderColumn(ACTIVITY_SLOTS, groupedByType.Activity, "Activities")}
+        </div>
       </div>
     </main>
+  );
+}
+
+
+function renderColumn(
+  slotMap: Record<string, SlotEntry>,
+  grouped: Record<string, string[]>,
+  title: string
+) {
+  return (
+    <div className="signup-column">
+      <h2>{title}</h2>
+      {["Friday", "Saturday", "Sunday"].map((day) => {
+        const slots = Object.entries(slotMap).filter(([, slot]) => slot.day === day);
+
+        return (
+          <div key={day} className="signup-day">
+            <h3>{day}</h3>
+            <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
+              {slots.map(([key, slot]) => {
+                const names = grouped[key] || [];
+                return (
+                  <li key={key} className="slot-line">
+                    {slot.label}
+                    {names.length > 0 && (
+                      <span className="name-list"> — {names.join(", ")}</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
   );
 }
