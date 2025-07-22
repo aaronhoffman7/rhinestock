@@ -53,7 +53,7 @@ export default function SignUpsClient() {
     .then((res) => res.json())
     .then((data: RawSignUpRow[]) => {
       const parsed = data
-        .map((row: any) => {
+        .map((row) => {
           const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
           const normalizedSlotType =
             slotTypeRaw === "grilling"
