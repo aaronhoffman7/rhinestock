@@ -49,15 +49,26 @@ export default function SignUps() {
       .then((res) => res.text())
       .then((text) => {
         const rows = text.split("\n").slice(1);
-        const parsed = rows
-          .map((row) => row.split(","))
-          .filter((cols) => cols.length >= 4)
-          .map(([timestamp, name, slotType, time]) => ({
-            timestamp,
-            name: name.trim(),
-            slotType: slotType.trim() as "Grilling" | "DJ",
-            time: time.trim(),
-          }));
+const parsed = rows
+  .map((row) => row.split(","))
+  .filter((cols) => cols.length >= 4)
+  .map(([timestamp, name, slotType, time]) => ({
+    timestamp,
+    name: name.trim(),
+    slotType: slotType.trim() as "Grilling" | "DJ",
+    time: time.trim(),
+  }))
+  .filter((entry) => {
+    // Ensure slotType is valid
+    const isValidType = entry.slotType === "Grilling" || entry.slotType === "DJ";
+
+    // Ensure time exists in the correct slot map
+    const validTimes = entry.slotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+    const isValidTime = validTimes.hasOwnProperty(entry.time);
+
+    return isValidType && isValidTime;
+  });
+
         setSignUps(parsed);
       });
   }, [setTitle]);
