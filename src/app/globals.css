@@ -78,19 +78,18 @@ nav {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 3rem;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 1rem;
   box-sizing: border-box;
   text-align: center;
 }
 
 nav a {
-  margin: 0 1em;
   color: var(--rdlavender);
   text-decoration: none;
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
   transition: all 0.6s ease;
   z-index: 2;
   position: relative;
@@ -254,16 +253,6 @@ p {
   opacity: 0.8;
   z-index: 2;
   pointer-events: none;
-}
-
-.left-shroom {
-  left: 0;
-  transform: translateX(50%);
-}
-
-.right-shroom {
-  right: 0;
-  transform: translateX(-50%) scaleX(-1); /* mirror image */
 }
 
 .text-overlay {
@@ -504,7 +493,6 @@ p {
 
 .signup-column {
   flex: 0 1 48%; /* Keep 2 columns, each taking up close to half */
-  min-width: 360px;
   padding: 1.5rem;
   background: #cb7d1d;
   border-radius: 12px;
@@ -589,16 +577,23 @@ p {
     padding: 1rem;
   }
 
-  .dual-column {
-    flex-direction: column;
-    gap: 2rem;
-    padding: 0 1rem;
-  }
 
-  .signup-column {
-    padding: 1rem;
-    max-width: 100%;
-  }
+
+  
+ .dual-column {
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0 1.25rem;
+  align-items: stretch; /* ✅ allows children to use full width */
+}
+
+
+.signup-column {
+  flex: 1 1 100%;
+  width: 100%;
+  padding: 1rem 1.25rem;   /* add side padding for breathing room */
+  box-sizing: border-box;
+}
 
   .slideshow-container {
     height: 30vh;
