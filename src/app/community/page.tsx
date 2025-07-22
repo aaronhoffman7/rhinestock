@@ -10,28 +10,28 @@ type SignUp = {
   time: string;
 };
 
-const GRILL_SLOTS: Record<string, number> = {
-  "Friday, 6:00 PM": 1,
-  "Saturday, 5:00 PM": 4,
-  "Saturday, 6:00 PM": 4,
-  "Sunday, 2:00 PM": 1,
+const GRILL_SLOTS: Record<string, { label: string; capacity: number }> = {
+  friday_6pm: { label: "Friday, 6:00 PM", capacity: 1 },
+  saturday_5pm: { label: "Saturday, 5:00 PM", capacity: 4 },
+  saturday_6pm: { label: "Saturday, 6:00 PM", capacity: 4 },
+  sunday_2pm: { label: "Sunday, 2:00 PM", capacity: 1 },
 };
 
-const DJ_SLOTS: Record<string, number> = {
-  "Friday night, 10:00 PM": 2,
-  "Friday night, 11:00 PM": 2,
-  "Friday, 12:00 PM": 2,
-  "Friday, 1:00 AM": 2,
-  "Friday latenight, 2:00 AM": 2,
-  "Friday latenight, 3:00 AM": 2,
-  "Saturday Sunset Sessions, 6:30 PM": 2,
-  "Saturday night, 10:00 PM": 2,
-  "Saturday night, 11:00 PM": 2,
-  "Saturday night, 12:00 AM": 2,
-  "Saturday, 1:00 AM": 2,
-  "Saturday, 2:00 AM": 2,
-  "Saturday, 3:00 AM": 2,
-  "Sunday, 9:30 AM": 1,
+const DJ_SLOTS: Record<string, { label: string; capacity: number }> = {
+  friday_10pm: { label: "Friday night, 10:00 PM", capacity: 2 },
+  friday_11pm: { label: "Friday night, 11:00 PM", capacity: 2 },
+  friday_12pm: { label: "Friday, 12:00 PM", capacity: 2 },
+  friday_1am: { label: "Friday, 1:00 AM", capacity: 2 },
+  friday_2am: { label: "Friday latenight, 2:00 AM", capacity: 2 },
+  friday_3am: { label: "Friday latenight, 3:00 AM", capacity: 2 },
+  saturday_sunset: { label: "Saturday Sunset Sessions, 6:30 PM", capacity: 2 },
+  saturday_10pm: { label: "Saturday night, 10:00 PM", capacity: 2 },
+  saturday_11pm: { label: "Saturday night, 11:00 PM", capacity: 2 },
+  saturday_12am: { label: "Saturday night, 12:00 AM", capacity: 2 },
+  saturday_1am: { label: "Saturday, 1:00 AM", capacity: 2 },
+  saturday_2am: { label: "Saturday, 2:00 AM", capacity: 2 },
+  saturday_3am: { label: "Saturday, 3:00 AM", capacity: 2 },
+  sunday_930am: { label: "Sunday, 9:30 AM", capacity: 1 },
 };
 
 const CSV_URL =
@@ -49,25 +49,20 @@ export default function SignUps() {
       .then((res) => res.text())
       .then((text) => {
         const rows = text.split("\n").slice(1);
-const parsed = rows
-  .map((row) => row.split(","))
-  .filter((cols) => cols.length >= 4)
-  .map(([timestamp, name, slotType, time]) => ({
-    timestamp,
-    name: name.trim(),
-    slotType: slotType.trim() as "Grilling" | "DJ",
-    time: time.trim(),
-  }))
-  .filter((entry) => {
-    // Ensure slotType is valid
-    const isValidType = entry.slotType === "Grilling" || entry.slotType === "DJ";
-
-    // Ensure time exists in the correct slot map
-    const validTimes = entry.slotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
-    const isValidTime = validTimes.hasOwnProperty(entry.time);
-
-    return isValidType && isValidTime;
-  });
+        const parsed = rows
+          .map((row) => row.split(","))
+          .filter((cols) => cols.length >= 4)
+          .map(([timestamp, name, slotType, time]) => ({
+            timestamp,
+            name: name.trim(),
+            slotType: slotType.trim() as "Grilling" | "DJ",
+            time: time.trim(),
+          }))
+          .filter((entry) => {
+            const isValidType = entry.slotType === "Grilling" || entry.slotType === "DJ";
+            const validTimes = entry.slotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+            return isValidType && validTimes.hasOwnProperty(entry.time);
+          });
 
         setSignUps(parsed);
       });
@@ -76,7 +71,6 @@ const parsed = rows
   const SLOT_CONFIG = selectedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
   const TIME_SLOTS = Object.keys(SLOT_CONFIG);
 
-  // Count how many people signed up per slot
   const takenCount: Record<string, number> = {};
   signUps
     .filter((s) => s.slotType === selectedSlotType)
@@ -84,12 +78,10 @@ const parsed = rows
       takenCount[s.time] = (takenCount[s.time] || 0) + 1;
     });
 
-  // Available slots = not at full capacity
   const availableTimes = TIME_SLOTS.filter(
-    (slot) => (takenCount[slot] || 0) < SLOT_CONFIG[slot]
+    (slot) => (takenCount[slot] || 0) < SLOT_CONFIG[slot].capacity
   );
 
-  // Group names per slot
   const groupedByType = {
     Grilling: {} as Record<string, string[]>,
     DJ: {} as Record<string, string[]>,
@@ -99,107 +91,109 @@ const parsed = rows
   for (const slot of Object.keys(DJ_SLOTS)) groupedByType.DJ[slot] = [];
 
   for (const s of signUps) {
-    if (!groupedByType[s.slotType][s.time]) {
-      groupedByType[s.slotType][s.time] = [];
-    }
     groupedByType[s.slotType][s.time].push(s.name);
   }
 
   const renderSchedule = (
-  slotMap: Record<string, number>,
-  grouped: Record<string, string[]>,
-  title: string
-) => (
-  <>
-    <h2>{title}</h2>
-    {["Friday", "Saturday", "Sunday"].map((day) => {
-      const slots = Object.keys(slotMap).filter((s) => s.startsWith(day));
-      return (
-        <div key={day} style={{ marginBottom: "2rem", textAlign: "left" }}>
-          <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>{day}</h3>
-          <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
-            {slots.map((slot) => {
-              const timeLabel = slot.split(",")[1]?.trim();
-              const names = grouped[slot] || [];
-              return (
-                <li
-                  key={slot}
-                  style={{
-                    fontSize: "1rem",
-                    color: "forestgreen",
-                    marginBottom: "0.4rem"
-                  }}
-                >
-                  {timeLabel} — {names.join(", ")}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      );
-    })}
-  </>
-);
+    slotMap: Record<string, { label: string; capacity: number }>,
+    grouped: Record<string, string[]>,
+    title: string
+  ) => (
+    <>
+      <h2>{title}</h2>
+      {["Friday", "Saturday", "Sunday"].map((day) => {
+        const slots = Object.entries(slotMap).filter(([_, val]) =>
+          val.label.startsWith(day)
+        );
 
+        return (
+          <div key={day} style={{ marginBottom: "2rem", textAlign: "left" }}>
+            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>{day}</h3>
+            <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
+              {slots.map(([key, slot]) => {
+                const names = grouped[key] || [];
+                return (
+                  <li
+                    key={key}
+                    style={{
+                      fontSize: "1rem",
+                      color: "forestgreen",
+                      marginBottom: "0.4rem",
+                    }}
+                  >
+                    {slot.label.split(",")[1]?.trim()} — {names.join(", ")}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
+    </>
+  );
 
   return (
     <main>
       <div style={{ maxWidth: "700px", margin: "0 auto", padding: "1rem" }}>
-      <h2>Sign Up for a Slot</h2>
-      <form
-        action="https://script.google.com/macros/s/AKfycbxB5IBodQ0TYFM8o7tH-VaWp5-ZS23R3XAeXpPhL0Kg3dxT2iFH1_JGFUTdJyrH72Y/exec"
-        method="POST"
-        target="hidden_iframe"
-        onSubmit={() => {
-          alert("Thanks for signing up!");
-          setTimeout(() => window.location.reload(), 1000);
-        }}
-      >
-        <label>
-          Name:<br />
-          <input type="text" name="name" required />
-        </label>
-        <br />
-        <br />
+        <h2>Sign Up for a Slot</h2>
+        <form
+          action="https://script.google.com/macros/s/AKfycbxB5IBodQ0TYFM8o7tH-VaWp5-ZS23R3XAeXpPhL0Kg3dxT2iFH1_JGFUTdJyrH72Y/exec"
+          method="POST"
+          target="hidden_iframe"
+          onSubmit={() => {
+            alert("Thanks for signing up!");
+            setTimeout(() => window.location.reload(), 1000);
+          }}
+        >
+          <label>
+            Name:<br />
+            <input type="text" name="name" required />
+          </label>
+          <br />
+          <br />
 
-        <label>
-          Slot Type:<br />
-          <select
-            name="slotType"
-            value={selectedSlotType}
-            onChange={(e) => setSelectedSlotType(e.target.value as "Grilling" | "DJ")}
-            required
-          >
-            <option value="Grilling">Grilling</option>
-            <option value="DJ">DJ</option>
-          </select>
-        </label>
-        <br />
-        <br />
+          <label>
+            Slot Type:<br />
+            <select
+              value={selectedSlotType}
+              onChange={(e) => setSelectedSlotType(e.target.value as "Grilling" | "DJ")}
+              required
+            >
+              <option value="Grilling">Grilling</option>
+              <option value="DJ">DJ</option>
+            </select>
+          </label>
+          <br />
+          <br />
 
-        <label>
-          Time:<br />
-          <select name="time" required>
-            <option value="">-- Select a Time Slot --</option>
-            {availableTimes.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <br />
+          {/* Hidden input to submit slotType to Google Sheets */}
+          <input type="hidden" name="slotType" value={selectedSlotType} />
 
-        <button type="submit">Sign Up</button>
-        <iframe name="hidden_iframe" style={{ display: "none" }}></iframe>
-      </form>
+          <label>
+            Time:<br />
+            <select name="time" required>
+              <option value="">-- Select a Time Slot --</option>
+              {Object.entries(SLOT_CONFIG)
+                .filter(([key]) => (takenCount[key] || 0) < SLOT_CONFIG[key].capacity)
+                .map(([key, { label }]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <br />
+          <br />
 
-      <hr style={{ margin: "2rem 0" }} />
+          <button type="submit">Sign Up</button>
+          <iframe name="hidden_iframe" style={{ display: "none" }}></iframe>
+        </form>
 
-      {renderSchedule(GRILL_SLOTS, groupedByType.Grilling, "Grilling Signups")}
-      {renderSchedule(DJ_SLOTS, groupedByType.DJ, "DJ Lineup")}
-    </div>
+        <hr style={{ margin: "2rem 0" }} />
+
+        {renderSchedule(GRILL_SLOTS, groupedByType.Grilling, "Grilling Signups")}
+        {renderSchedule(DJ_SLOTS, groupedByType.DJ, "DJ Lineup")}
+      </div>
     </main>
   );
 }
