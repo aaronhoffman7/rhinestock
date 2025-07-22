@@ -43,30 +43,40 @@ export default function SignUps() {
   const [selectedSlotType, setSelectedSlotType] = useState<"Grilling" | "DJ">("Grilling");
 
   useEffect(() => {
-    setTitle("Event Sign Ups");
+  setTitle("Event Sign Ups");
 
-    fetch(CSV_URL + "&t=" + new Date().getTime())
-      .then((res) => res.text())
-      .then((text) => {
-        const rows = text.split("\n").slice(1);
-        const parsed = rows
-          .map((row) => row.split(","))
-          .filter((cols) => cols.length >= 4)
-          .map(([timestamp, name, slotType, time]) => ({
+  fetch(CSV_URL + "&t=" + new Date().getTime())
+    .then((res) => res.text())
+    .then((text) => {
+      const rows = text.split("\n").slice(1);
+
+      const parsed = rows
+        .map((row) => row.split(","))
+        .filter((cols) => cols.length >= 4)
+        .map(([timestamp, name, slotType, time]) => {
+          const trimmedSlotType = slotType.trim() as "Grilling" | "DJ";
+          const validSlots = trimmedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
+
+          // Try to find the key from the label
+          const timeKey = Object.entries(validSlots).find(
+            ([, slot]) => slot.label === time.trim()
+          )?.[0];
+
+          if (!timeKey) return null; // invalid entry
+
+          return {
             timestamp,
             name: name.trim(),
-            slotType: slotType.trim() as "Grilling" | "DJ",
-            time: time.trim(),
-          }))
-          .filter((entry) => {
-            const isValidType = entry.slotType === "Grilling" || entry.slotType === "DJ";
-            const validTimes = entry.slotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
-            return isValidType && validTimes.hasOwnProperty(entry.time);
-          });
+            slotType: trimmedSlotType,
+            time: timeKey, // replace with internal key
+          };
+        })
+        .filter((entry): entry is SignUp => entry !== null); // filter out nulls
 
-        setSignUps(parsed);
-      });
-  }, [setTitle]);
+      setSignUps(parsed);
+    });
+}, [setTitle]);
+
 
   const SLOT_CONFIG = selectedSlotType === "Grilling" ? GRILL_SLOTS : DJ_SLOTS;
 
