@@ -6,15 +6,18 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
   const [scrollUp, setScrollUp] = useState(true);
   const lastScrollYRef = useRef(0);
 
-  function renderWiggleText(text: string) {
-    return (
-      <>
-        {Array.from(text).map((char, i) => (
-          <span key={i}>{char === " " ? "\u00A0" : char}</span>
-        ))}
-      </>
-    );
-  }
+function renderWiggleText(text: string) {
+  return (
+    <>
+      {Array.from(text).map((char, i) => (
+        <span key={i} className="shroom-wiggle">
+          {char === " " ? "\u00A0" : char}
+        </span>
+      ))}
+    </>
+  );
+}
+
 
   // Scroll effect
   useEffect(() => {

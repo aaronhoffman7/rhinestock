@@ -94,12 +94,22 @@ function renderWiggleText(text: string) {
 />
 
       </div>
-
-           {/* Tagline under image */}
-     <p className="tagline wiggle-title">
-  {renderWiggleText("August 30th – September 1st, 2025")}
+<p className="tagline">
+  <span className="line-large">
+    {"August 30th – September 1st, 2025".split("").map((char, i) => (
+      <span key={i} className="shroom-wiggle">
+        {char === " " ? "\u00A0" : char}
+      </span>
+    ))}
+  </span>
   <br />
-  {renderWiggleText("Rhinebeck, NY")}
+  <span className="line-small">
+    {"Rhinebeck, NY".split("").map((char, i) => (
+      <span key={i} className="shroom-wiggle">
+        {char === " " ? "\u00A0" : char}
+      </span>
+    ))}
+  </span>
 </p>
 
 

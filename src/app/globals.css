@@ -81,7 +81,6 @@ nav a:hover {
 }
 
 .tagline {
-  font-size: 2.3em;
   font-weight: bold;
   margin: 1em 0;
   text-align: center;
@@ -179,17 +178,22 @@ p {
   z-index: 2;
 }
 
-/* Give each letter a slight animation offset */
-.wiggle-title span {
+
+.shroom-wiggle {
   display: inline-block;
   animation: shroomWiggle 8s infinite ease-in-out;
+  transform-origin: center bottom;
+}
+
+/* Give each letter a slight animation offset */
+.wiggle-title span {
   font-family: var(--headerFont);
-  font-size: 60px;
+  font-size: 40px;
   letter-spacing: 1.65px;
   text-shadow: 2px 2px #000;
   color: var(--rdSkyBlue);
-  transform-origin: center bottom;
 }
+
 
 .wiggle-title span:nth-child(odd) {
   animation-delay: 0.2s;
@@ -423,13 +427,21 @@ p {
 }
 
 
-.tagline.wiggle-title span {
-  display: inline-block;
-  animation: shroomWiggle 8s infinite ease-in-out;
-  font-family: var(--headerFont);
-  font-size: 36px; /* match h2 */
-  letter-spacing: 1.65px;
-  text-shadow: .01px .01px #000;
+.tagline span {
+  font-family: var(--bodyFont);
   color: var(--rdforestgreenn);
-  transform-origin: center bottom;
+  text-shadow: 1px 1px #000;
+  letter-spacing: 2.25px;
+}
+
+.tagline .line-large {
+  font-size: 2.5rem;
+  display: block;
+  text-align: center;
+}
+
+.tagline .line-small {
+  font-size: 1.75rem;
+  display: block;
+  text-align: center;
 }
