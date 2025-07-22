@@ -9,6 +9,14 @@ type SignUp = {
   time: string;
 };
 
+type RawSignUpRow = {
+  Timestamp: string;
+  Name: string;
+  "Slot Type": string;
+  Time: string;
+};
+
+
 const GRILL_SLOTS: Record<string, { label: string; capacity: number }> = {
   friday_6pm: { label: "Friday, 6:00 PM", capacity: 1 },
   saturday_5pm: { label: "Saturday, 5:00 PM", capacity: 4 },
@@ -43,7 +51,7 @@ export default function SignUpsClient() {
   useEffect(() => {
   fetch(CSV_URL + "?t=" + Date.now(), { cache: "no-store" })
     .then((res) => res.json())
-    .then((data: any[]) => {
+    .then((data: RawSignUpRow[]) => {
       const parsed = data
         .map((row: any) => {
           const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
