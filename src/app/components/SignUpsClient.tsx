@@ -14,6 +14,7 @@ type RawSignUpRow = {
   Name: string;
   "Slot Type": string;
   Time: string;
+  activityDescription?: string; // optional
 };
 
 type SlotEntry = {
@@ -23,6 +24,8 @@ type SlotEntry = {
 };
 
 type SlotMap = Record<string, SlotEntry>;
+
+
 
 const GRILL_SLOTS: SlotMap = {
   friday_6pm: { day: "Friday", label: "6:00 PM", capacity: 1 },
@@ -85,11 +88,15 @@ export default function SignUpsClient() {
             if (!trimmedTime) return null;
 
             return {
-              timestamp: row["Timestamp"]?.trim(),
-              name: row["Name"]?.trim(),
-              slotType: normalizedSlotType,
-              time: trimmedTime,
-            };
+  timestamp: row["Timestamp"]?.trim(),
+  name:
+    row["Slot Type"]?.toLowerCase() === "activity" && row["activityDescription"]
+      ? `${row["Name"]?.trim()} — ${row["activityDescription"].trim()}`
+      : row["Name"]?.trim(),
+  slotType: normalizedSlotType,
+  time: trimmedTime,
+};
+
           })
           .filter((entry): entry is SignUp => entry !== null);
 
@@ -156,6 +163,7 @@ export default function SignUpsClient() {
 
   const carpoolGroups = buildCarpool(signUps);
   const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
+  const [activityDescription, setActivityDescription] = useState("");
 
   function renderColumn(slotMap: SlotMap, filled: Record<string, string[]>, heading: string) {
   // Group slots by day
@@ -192,7 +200,7 @@ return (
 
       {/* === SIGN-UP FORM === */}
       <form
-        action="https://script.google.com/macros/s/AKfycbxPY05vXtt02iunZtgeKeRoBsR1A6h2SFwPPBIZqG61PknkolvfTlQ2pbegLigR61z6/exec"
+        action="https://script.google.com/macros/s/AKfycbwAVRCFayGn44haZTTjH242Yx9RqY2JIIUvBpo5xNOf9Pu6yBDiNYeFc6vJOp_nK-wT/exec"
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
@@ -226,53 +234,41 @@ return (
   <p>Time:</p>
   <select name="time" required>
     <option value="">-- Select a Time Slot --</option>
-   {Object.entries(
-  selectedSlotType === "Grilling"
-    ? GRILL_SLOTS
-    : selectedSlotType === "DJ"
-    ? DJ_SLOTS
-    : selectedSlotType === "Activity"
-    ? ACTIVITY_SLOTS
-    : {
-  from_dc_fri: {
-    label: "Leaving from DC",
-    capacity: 999,
-    day: "Friday",
-  },
-  from_dc_sat: {
-    label: "Leaving from DC",
-    capacity: 999,
-    day: "Saturday",
-  },
-  to_dc_mon: {
-    label: "Returning to DC",
-    capacity: 999,
-    day: "Monday",
-  },
-  from_nyc_fri: {
-    label: "Leaving from NYC",
-    capacity: 999,
-    day: "Friday",
-  },
-  from_nyc_sat: {
-    label: "Leaving from NYC",
-    capacity: 999,
-    day: "Saturday",
-  },
-  to_nyc_mon: {
-    label: "Returning to NYC",
-    capacity: 999,
-    day: "Monday",
-  },
-}
-
-).map(([key, entry]) => (
-  <option key={key} value={key}>
-    {entry.day} – {entry.label}
-  </option>
-))}
+    {Object.entries(
+      selectedSlotType === "Grilling"
+        ? GRILL_SLOTS
+        : selectedSlotType === "DJ"
+        ? DJ_SLOTS
+        : selectedSlotType === "Activity"
+        ? ACTIVITY_SLOTS
+        : {
+            from_dc_fri: { label: "Leaving from DC", capacity: 999, day: "Friday" },
+            from_dc_sat: { label: "Leaving from DC", capacity: 999, day: "Saturday" },
+            to_dc_mon: { label: "Returning to DC", capacity: 999, day: "Monday" },
+            from_nyc_fri: { label: "Leaving from NYC", capacity: 999, day: "Friday" },
+            from_nyc_sat: { label: "Leaving from NYC", capacity: 999, day: "Saturday" },
+            to_nyc_mon: { label: "Returning to NYC", capacity: 999, day: "Monday" },
+          }
+    ).map(([key, entry]) => (
+      <option key={key} value={key}>
+        {entry.day} – {entry.label}
+      </option>
+    ))}
   </select>
 </label>
+
+{selectedSlotType === "Activity" && (
+  <label>
+    <p>Describe your activity:</p>
+    <input
+      type="text"
+      name="activityDescription"
+      value={activityDescription}
+      onChange={(e) => setActivityDescription(e.target.value)}
+      required
+    />
+  </label>
+)}
 
         <br /><br />
 
