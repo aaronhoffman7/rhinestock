@@ -216,7 +216,7 @@ return (
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
-          alert("Thanks for signing up! there&apos;s a lot riding on you.... The page will refresh now.");
+          alert("Thanks for signing up! there's a lot riding on you.... The page will refresh now.");
           setTimeout(() => window.location.reload(), 500);
         }}
         style={{ marginBottom: "3rem" }}
@@ -328,8 +328,8 @@ return (
   {[
   "from_nyc_fri",
   "from_dc_fri",
-  "from_nyc_sat",  // ✅ add Saturday NYC
-  "from_dc_sat",   // ✅ add Saturday DC
+  "from_nyc_sat",  
+  "from_dc_sat", 
   "to_nyc_mon",
   "to_dc_mon",
 ].map((key) => {
