@@ -107,7 +107,7 @@ export default function HomePage() {
         <div className="text-column">
           <div className="text-content">
             <p>
-              A three day ~festival~ in the beautiful Hudson Valley, hosted at the house Aaron and Elliot grew up at! Come for communal meals, music + dancing, activities, camping, and excursions to nearby attractions. Come for a few hours or the whole weekend long!
+              A three day ~festival~ in the beautiful Hudson Valley. Communal meals, music + dancing, activities, camping, excursions to nearby attractions, and overall silly times. Come for a few hours or the whole weekend long!
             </p>
           </div>
 

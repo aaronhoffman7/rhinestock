@@ -157,20 +157,30 @@ export default function SignUpsClient() {
   const carpoolGroups = buildCarpool(signUps);
 
   function renderColumn(slotMap: SlotMap, filled: Record<string, string[]>, heading: string) {
-    return (
-      <div className="signup-column">
-        <h2>{heading}</h2>
-        {Object.entries(slotMap).map(([key, entry]) => (
-          <div key={key} className="signup-day">
-            <div className="slot-line">
-              {entry.day} – {entry.label}
-            </div>
-            <div className="name-list">{filled[key]?.join(", ") || "—"}</div>
-          </div>
-        ))}
-      </div>
-    );
+  // Group slots by day
+  const groupedByDay: Record<string, [string, SlotEntry][]> = {};
+  for (const [key, entry] of Object.entries(slotMap)) {
+    if (!groupedByDay[entry.day]) groupedByDay[entry.day] = [];
+    groupedByDay[entry.day].push([key, entry]);
   }
+
+  return (
+    <div className="signup-column">
+      <h2>{heading}</h2>
+      {Object.entries(groupedByDay).map(([day, slots]) => (
+        <div key={day} className="signup-day">
+          <h3 style={{ marginBottom: "0.3rem" }}>{day}</h3>
+          {slots.map(([key, entry]) => (
+            <div key={key} className="slot-line" style={{ marginBottom: "0.2rem" }}>
+              <div style={{ fontWeight: 600 }}>{entry.label}</div>
+              <div className="name-list">{filled[key]?.join(", ") || "—"}</div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 
 

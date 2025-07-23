@@ -47,24 +47,28 @@ export default function ItineraryPage() {
   ];
 
   return (
-    <main className="site-container">
-      <h2 className="tagline">Tentative Weekend Itinerary</h2>
-      <div className="text-column">
-        {schedule.map((day, idx) => (
-          <section key={idx} className="info-row">
-            <h2>{day.day}</h2>
-            <ul style={{ listStyleType: "none", padding: 0 }}>
-              {day.events.map((event, i) => (
-                <li key={i} className="text-content">
-                  <p>
-                    <strong>{event.time}</strong> — {event.title}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
+  <main className="site-container">
+  <h2 className="tagline">Tentative Weekend Itinerary</h2>
+  {schedule.map((day, idx) => (
+    <section key={idx} className="itinerary-row">
+      <div className="itinerary-day">
+        <div className="itinerary-date">
+          <h2>{day.day}</h2>
+        </div>
+        <div className="itinerary-events">
+          <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+            {day.events.map((event, i) => (
+              <li key={i} className="text-content">
+                <p>
+                  <strong>{event.time}</strong> — {event.title}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </main>
-  );
+    </section>
+  ))}
+</main>
+);
 }
