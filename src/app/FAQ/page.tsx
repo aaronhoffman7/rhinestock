@@ -23,7 +23,7 @@ export default function InterestPage() {
   <section>
     <h2>How do I get there?</h2>
 <p>
-  We’re located at <a href="https://maps.app.goo.gl/dNo3qX9ordSLAPsz6" target="_blank" rel="noopener noreferrer"> 13 Reeder Road, Rhinebeck, NY.
+  Were located at <a href="https://maps.app.goo.gl/dNo3qX9ordSLAPsz6" target="_blank" rel="noopener noreferrer"> 13 Reeder Road, Rhinebeck, NY.
   </a> You can get here by <a href="/signups#carpool">carpool</a> or train: either take  
   <a href="https://www.amtrak.com/tickets/departure.html" target="_blank" rel="noopener noreferrer"> Amtrak from NYC Penn Station to Rhinecliff
   </a> or <a href="https://new.mta.info/schedules/metro-north-railroad" target="_blank" rel="noopener noreferrer">
