@@ -76,7 +76,7 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 5rem; /* Large spacing for desktop */
-    padding: 0.5rem 1rem;
+    padding: 0.1rem 1rem;
     box-sizing: border-box;
   }
 
@@ -204,13 +204,19 @@
   }
 
   /* Give each letter a slight animation offset */
-  .wiggle-title span {
-    font-family: var(--headerFont);
-    font-size: 90px;
-    letter-spacing: .21em;
-    color: var(--rdSkyBlue);
-  }
-
+.wiggle-title span {
+  font-family: var(--headerFont);
+  font-size: 90px;
+  letter-spacing: 0.21em;
+  color: var(--rdSkyBlue);
+  -webkit-text-stroke: 2px rgb(7, 45, 13);          /* Clean white border */
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.25),       /* Soft shadow */
+    0 0 10px var(--rdSkyBlue);             /* Glow effect */
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
 
   .wiggle-title span:nth-child(odd) {
     animation-delay: 0.2s;
@@ -669,7 +675,7 @@
     }
 
     .map-wrapper {
-      padding-top: 65%; /* shorter map on mobile */
+      padding-top: 85%; /* shorter map on mobile */
     }
 
     .map-embed iframe {
@@ -791,4 +797,24 @@
   height: auto;
   overflow: hidden;
   border-radius: 1rem;
+}
+
+.rainbow-header-container {
+  position: relative;
+  display: inline-block;
+  padding: 0rem;
+  text-align: center;
+}
+
+.rainbow-bg {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 120%;
+  height: 90%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
 }

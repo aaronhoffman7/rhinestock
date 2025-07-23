@@ -37,7 +37,10 @@ function renderWiggleText(text: string) {
   <div className={scrollUp ? "header-inner scroll-up" : "header-inner scroll-down"}>
     <div className="header-brand">
       <div className="header-title">
-        <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
+        <div className="rainbow-header-container">
+  <img src="/photos/rainbow.jpg" alt="Rainbow" className="rainbow-bg" />
+  <h1 className="wiggle-title">{renderWiggleText(title)}</h1>
+</div>
         {subtitle && <h3>{subtitle}</h3>}
       </div>
     </div>
