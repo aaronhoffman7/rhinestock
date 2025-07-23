@@ -14,8 +14,9 @@ type RawSignUpRow = {
   Name: string;
   "Slot Type": string;
   Time: string;
-  activityDescription?: string; // optional
+  activityDescription?: string;
 };
+
 
 type SlotEntry = {
   label: string;
@@ -24,8 +25,6 @@ type SlotEntry = {
 };
 
 type SlotMap = Record<string, SlotEntry>;
-
-
 
 const GRILL_SLOTS: SlotMap = {
   friday_6pm: { day: "Friday", label: "6:00 PM", capacity: 1 },
@@ -56,53 +55,57 @@ const ACTIVITY_SLOTS: SlotMap = {
   sunday_morning: { day: "Sunday", label: "Morning Activity", capacity: 2 },
 };
 
-const CSV_URL =
-  "https://script.google.com/macros/s/AKfycbzJ7aQaHywVW_KWvzPEDPUDCnqAU5hyEJUOKRfttnSistuJhZXYE5GR7ciYwnUrs2t2/exec";
+const JSON_URL =
+  "https://script.google.com/macros/s/AKfycbyi1P0Q95WPO9qdNd-JU7CHhMl-tTYgfEnq1sMZbrSRSUb1NA7GTNXe1xSyzVCFj2U4/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
 
   useEffect(() => {
-    fetch(CSV_URL + "?t=" + Date.now(), { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data: RawSignUpRow[]) => {
-        const parsed = data
-          .map((row) => {
-            const slotTypeRaw = row["Slot Type"]?.trim().toLowerCase();
-            const normalizedSlotType =
-              slotTypeRaw === "grilling"
-                ? "Grilling"
-                : slotTypeRaw === "dj"
-                ? "DJ"
-                : slotTypeRaw === "driver"
-                ? "Driver"
-                : slotTypeRaw === "rider"
-                ? "Rider"
-                : slotTypeRaw === "activity"
-                ? "Activity"
-                : null;
+  fetch(JSON_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then((res) => res.json())
+.then((rows: RawSignUpRow[]) => {
+  const parsed = rows
+    .map((row) => {
+      const slotTypeRaw = row["Slot Type"]?.toLowerCase();
+      const normalizedSlotType =
+        slotTypeRaw === "grilling"
+          ? "Grilling"
+          : slotTypeRaw === "dj"
+          ? "DJ"
+          : slotTypeRaw === "driver"
+          ? "Driver"
+          : slotTypeRaw === "rider"
+          ? "Rider"
+          : slotTypeRaw === "activity"
+          ? "Activity"
+          : null;
 
-            if (!normalizedSlotType) return null;
+      if (!normalizedSlotType) return null;
 
-            const trimmedTime = row["Time"]?.trim();
-            if (!trimmedTime) return null;
+      const trimmedTime = row["Time"]?.trim();
+      if (!trimmedTime) return null;
 
-            return {
-  timestamp: row["Timestamp"]?.trim(),
-  name:
-    row["Slot Type"]?.toLowerCase() === "activity" && row["activityDescription"]
-      ? `${row["Name"]?.trim()} — ${row["activityDescription"].trim()}`
-      : row["Name"]?.trim(),
-  slotType: normalizedSlotType,
-  time: trimmedTime,
-};
+      const name = row["Name"]?.trim();
+      const activityDesc = row["activityDescription"]?.trim();
 
-          })
-          .filter((entry): entry is SignUp => entry !== null);
+      return {
+        timestamp: row["Timestamp"]?.trim(),
+        name:
+          normalizedSlotType === "Activity" && activityDesc
+            ? `${name} — ${activityDesc}`
+            : name,
+        slotType: normalizedSlotType,
+        time: trimmedTime,
+      };
+    })
+    .filter((entry): entry is SignUp => entry !== null);
 
-        setSignUps(parsed);
-      });
-  }, []);
+  setSignUps(parsed);
+});
+
+}, []);
+
 
   // === Group by slotType and time ===
   const groupedByType: Record<SignUp["slotType"], Record<string, string[]>> = {
@@ -142,7 +145,8 @@ export default function SignUpsClient() {
   function buildCarpool(signUps: SignUp[]): CarpoolSlot[] {
     const carpoolSlots: CarpoolSlot[] = [];
 
-    ["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].forEach((time) => {
+    ["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"]
+.forEach((time) => {
       const riders = signUps.filter((s) => s.slotType === "Rider" && s.time === time).map((s) => s.name);
       const drivers = signUps.filter((s) => s.slotType === "Driver" && s.time === time).map((s) => s.name);
 
@@ -164,6 +168,7 @@ export default function SignUpsClient() {
   const carpoolGroups = buildCarpool(signUps);
   const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
   const [activityDescription, setActivityDescription] = useState("");
+
 
   function renderColumn(slotMap: SlotMap, filled: Record<string, string[]>, heading: string) {
   // Group slots by day
@@ -200,7 +205,7 @@ return (
 
       {/* === SIGN-UP FORM === */}
       <form
-        action="https://script.google.com/macros/s/AKfycbwAVRCFayGn44haZTTjH242Yx9RqY2JIIUvBpo5xNOf9Pu6yBDiNYeFc6vJOp_nK-wT/exec"
+        action="https://script.google.com/macros/s/AKfycbxPY05vXtt02iunZtgeKeRoBsR1A6h2SFwPPBIZqG61PknkolvfTlQ2pbegLigR61z6/exec"
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
@@ -230,45 +235,70 @@ return (
   </select>
 </label>
 
-<label>
-  <p>Time:</p>
-  <select name="time" required>
-    <option value="">-- Select a Time Slot --</option>
-    {Object.entries(
-      selectedSlotType === "Grilling"
-        ? GRILL_SLOTS
-        : selectedSlotType === "DJ"
-        ? DJ_SLOTS
-        : selectedSlotType === "Activity"
-        ? ACTIVITY_SLOTS
-        : {
-            from_dc_fri: { label: "Leaving from DC", capacity: 999, day: "Friday" },
-            from_dc_sat: { label: "Leaving from DC", capacity: 999, day: "Saturday" },
-            to_dc_mon: { label: "Returning to DC", capacity: 999, day: "Monday" },
-            from_nyc_fri: { label: "Leaving from NYC", capacity: 999, day: "Friday" },
-            from_nyc_sat: { label: "Leaving from NYC", capacity: 999, day: "Saturday" },
-            to_nyc_mon: { label: "Returning to NYC", capacity: 999, day: "Monday" },
-          }
-    ).map(([key, entry]) => (
-      <option key={key} value={key}>
-        {entry.day} – {entry.label}
-      </option>
-    ))}
-  </select>
-</label>
-
 {selectedSlotType === "Activity" && (
   <label>
-    <p>Describe your activity:</p>
+    <p>Activity Description (e.g. type of workshop):</p>
     <input
       type="text"
-      name="activityDescription"
+      name="activityDescription" 
       value={activityDescription}
       onChange={(e) => setActivityDescription(e.target.value)}
       required
     />
   </label>
 )}
+
+<label>
+  <p>Time:</p>
+  <select name="time" required>
+    <option value="">-- Select a Time Slot --</option>
+   {Object.entries(
+  selectedSlotType === "Grilling"
+    ? GRILL_SLOTS
+    : selectedSlotType === "DJ"
+    ? DJ_SLOTS
+    : selectedSlotType === "Activity"
+    ? ACTIVITY_SLOTS
+: {
+  from_dc_fri: {
+    label: "Leaving from DC",
+    capacity: 999,
+    day: "Friday",
+  },
+  from_nyc_fri: {
+    label: "Leaving from NYC",
+    capacity: 999,
+    day: "Friday",
+  },
+  from_dc_sat: {
+    label: "Leaving from DC",
+    capacity: 999,
+    day: "Saturday",
+  },
+  from_nyc_sat: {
+    label: "Leaving from NYC",
+    capacity: 999,
+    day: "Saturday",
+  },
+  to_dc_mon: {
+    label: "Returning to DC",
+    capacity: 999,
+    day: "Monday",
+  },
+  to_nyc_mon: {
+    label: "Returning to NYC",
+    capacity: 999,
+    day: "Monday",
+  },
+}
+
+).map(([key, entry]) => (
+  <option key={key} value={key}>
+    {entry.day} – {entry.label}
+  </option>
+))}
+  </select>
+</label>
 
         <br /><br />
 
@@ -287,7 +317,15 @@ return (
 
   <div className="signup-column">
   <h2>Carpool</h2>
-  {["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].map((key) => {
+  {[
+  "from_nyc_fri",
+  "from_dc_fri",
+  "from_nyc_sat",  // ✅ add Saturday NYC
+  "from_dc_sat",   // ✅ add Saturday DC
+  "to_nyc_mon",
+  "to_dc_mon",
+].map((key) => {
+
     const group = carpoolGroups.find((g) => g.time === key);
     if (!group) return null;
 

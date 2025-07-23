@@ -28,7 +28,7 @@
 
   body {
     font-family: var(--headerFont);
-    background: linear-gradient(180deg, var(--rdSkyBlue) 10%, var(--rdlavender) 90%);
+    background: linear-gradient(180deg, var(--rdSkyBlue) 10%, var(--burntOrange) 90%);
     margin: 0;
     padding: 0;
     color: var(--myForestGreen);
