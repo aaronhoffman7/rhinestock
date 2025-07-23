@@ -43,7 +43,9 @@ export default function ExcursionsPage() {
 
   return (
     <main className="site-container">
-      <h2 className="tagline">Local Excursions</h2>
+      <h2 style={{ fontSize: "2.5rem", margin: "2rem 0 1.5rem", textAlign: "center" }}>
+  Local Excursions
+</h2>
       <div className="text-column">
         <p style={{ marginBottom: "2.3rem" }}>Explore the Hudson Valley! These are a few nearby options we’re excited about- totally optional, but available if you want to break out for a mini adventure.</p>
 

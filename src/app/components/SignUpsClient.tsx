@@ -135,7 +135,7 @@ export default function SignUpsClient() {
   function buildCarpool(signUps: SignUp[]): CarpoolSlot[] {
     const carpoolSlots: CarpoolSlot[] = [];
 
-    ["from_dc_fri", "to_dc_sun"].forEach((time) => {
+    ["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].forEach((time) => {
       const riders = signUps.filter((s) => s.slotType === "Rider" && s.time === time).map((s) => s.name);
       const drivers = signUps.filter((s) => s.slotType === "Driver" && s.time === time).map((s) => s.name);
 
@@ -155,6 +155,7 @@ export default function SignUpsClient() {
   }
 
   const carpoolGroups = buildCarpool(signUps);
+  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
 
   function renderColumn(slotMap: SlotMap, filled: Record<string, string[]>, heading: string) {
   // Group slots by day
@@ -182,16 +183,11 @@ export default function SignUpsClient() {
   );
 }
 
-
-
-
-  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
-
 return (
-  <main>
-    <div style={{ maxWidth: "100%", margin: "0 auto", padding: "1rem" }}>
- <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>
-  Sign up for something helpful, or burdensome
+  <main className="site-container">
+ <div style={{ maxWidth: "100%", margin: "0 auto", padding: "1rem" }}>
+<h2 style={{ fontSize: "2rem", margin: "2rem 0 1.5rem", textAlign: "center" }}>
+  Sign up for something helpful, or burdensome..
 </h2>
 
       {/* === SIGN-UP FORM === */}
@@ -200,64 +196,84 @@ return (
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
-          alert("Thanks for signing up! The page will refresh shortly.");
+          alert("Thanks for signing up! There's a lot riding on you.... The page will refresh now.");
           setTimeout(() => window.location.reload(), 500);
         }}
         style={{ marginBottom: "3rem" }}
       >
         <label>
-          Name:<br />
-          <input type="text" name="name" required />
-        </label>
-        <br /><br />
+  <p>Name:</p>
+  <input type="text" name="name" required />
+</label>
 
-        <label>
-          Sign up type:<br />
-          <select
-            name="slotType"
-            value={selectedSlotType}
-            onChange={(e) => setSelectedSlotType(e.target.value as SignUp["slotType"])}
-            required
-          >
-            <option value="Grilling">Grilling</option>
-            <option value="DJ">DJ</option>
-            <option value="Driver">Carpool Driver</option>
-            <option value="Rider">Carpool Rider</option>
-            <option value="Activity">Activity Host</option>
-          </select>
-        </label>
-        <br /><br />
+<label>
+  <p>Whatchu signing up for?:</p>
+  <select
+    name="slotType"
+    value={selectedSlotType}
+    onChange={(e) => setSelectedSlotType(e.target.value as SignUp["slotType"])}
+    required
+  >
+    <option value="Grilling">Grilling</option>
+    <option value="DJ">DJ</option>
+    <option value="Driver">Carpool Driver</option>
+    <option value="Rider">Carpool Rider</option>
+    <option value="Activity">Activity Host</option>
+  </select>
+</label>
 
-        <label>
-          Time:<br />
-          <select name="time" required>
-            <option value="">-- Select a Time Slot --</option>
-            {Object.entries(
-              selectedSlotType === "Grilling"
-                ? GRILL_SLOTS
-                : selectedSlotType === "DJ"
-                ? DJ_SLOTS
-                : selectedSlotType === "Activity"
-                ? ACTIVITY_SLOTS
-                : {
-                    from_dc_fri: {
-                      label: "Leaving from DC",
-                      capacity: 999,
-                      day: "Friday",
-                    },
-                    to_dc_sun: {
-                      label: "Returning to DC",
-                      capacity: 999,
-                      day: "Sunday",
-                    },
-                  }
-            ).map(([key, entry]) => (
-              <option key={key} value={key}>
-                {entry.day} – {entry.label}
-              </option>
-            ))}
-          </select>
-        </label>
+<label>
+  <p>Time:</p>
+  <select name="time" required>
+    <option value="">-- Select a Time Slot --</option>
+   {Object.entries(
+  selectedSlotType === "Grilling"
+    ? GRILL_SLOTS
+    : selectedSlotType === "DJ"
+    ? DJ_SLOTS
+    : selectedSlotType === "Activity"
+    ? ACTIVITY_SLOTS
+    : {
+  from_dc_fri: {
+    label: "Leaving from DC",
+    capacity: 999,
+    day: "Friday",
+  },
+  from_dc_sat: {
+    label: "Leaving from DC",
+    capacity: 999,
+    day: "Saturday",
+  },
+  to_dc_mon: {
+    label: "Returning to DC",
+    capacity: 999,
+    day: "Monday",
+  },
+  from_nyc_fri: {
+    label: "Leaving from NYC",
+    capacity: 999,
+    day: "Friday",
+  },
+  from_nyc_sat: {
+    label: "Leaving from NYC",
+    capacity: 999,
+    day: "Saturday",
+  },
+  to_nyc_mon: {
+    label: "Returning to NYC",
+    capacity: 999,
+    day: "Monday",
+  },
+}
+
+).map(([key, entry]) => (
+  <option key={key} value={key}>
+    {entry.day} – {entry.label}
+  </option>
+))}
+  </select>
+</label>
+
         <br /><br />
 
         <button type="submit">Sign Up</button>
@@ -266,7 +282,7 @@ return (
 
       {/* === SIGNUP LISTS === */}
       <div className="dual-column">
-        {renderColumn(DJ_SLOTS, groupedByType.DJ, "Musician + DJ Lineup")}
+        {renderColumn(DJ_SLOTS, groupedByType.DJ, "Music + DJ Lineup")}
         {renderColumn(GRILL_SLOTS, groupedByType.Grilling, "Grilling slots")}
       </div>
 
@@ -274,23 +290,29 @@ return (
   {renderColumn(ACTIVITY_SLOTS, groupedByType.Activity, "Activities")}
 
   <div className="signup-column">
-    <h2>Carpool</h2>
-    {carpoolGroups.map((group) => (
-      <div key={group.time} className="signup-day">
-        <h3 style={{ marginBottom: "0.5rem" }}>
-          {group.time === "from_dc_fri"
-            ? "Friday – Leaving from DC"
-            : "Sunday – Returning to DC"}
-        </h3>
+  <h2>Carpool</h2>
+  {["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].map((key) => {
+    const group = carpoolGroups.find((g) => g.time === key);
+    if (!group) return null;
+
+const labelMap: Record<string, string> = {
+  from_nyc_fri: "Friday – Leave from NYC",
+  from_dc_fri: "Friday – Leave from DC",
+  from_nyc_sat: "Saturday – Leave from NYC",   // ✅ New
+  from_dc_sat: "Saturday – Leave from DC",     // ✅ New
+  to_nyc_mon: "Monday – Return to NYC",
+  to_dc_mon: "Monday – Return to DC",
+};
+
+
+    
+
+    return (
+      <div key={key} className="signup-day">
+        <h3 style={{ marginBottom: "0.5rem" }}>{labelMap[key]}</h3>
 
         {group.cars.length > 0 ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-            }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {group.cars.map((car, index) => (
               <div
                 key={index}
@@ -305,8 +327,7 @@ return (
                   <strong>Driver:</strong> {car.driver || "—"}
                 </div>
                 <div>
-                  <strong>Riders:</strong>{" "}
-                  {car.riders.length > 0 ? car.riders.join(", ") : "—"}
+                  <strong>Riders:</strong> {car.riders.length > 0 ? car.riders.join(", ") : "—"}
                 </div>
               </div>
             ))}
@@ -315,10 +336,11 @@ return (
           <p style={{ fontStyle: "italic" }}>No cars yet for this time.</p>
         )}
       </div>
-    ))}
-  </div>
+    );
+  })}
 </div>
-    </div>
-  </main>
-);
-}
+      </div> {/* ends carpool signup-column */}
+    </div> {/* ends dual-column */}
+</main>
+);       // ✅ Add this line!
+} // <-- ✅ This was missing

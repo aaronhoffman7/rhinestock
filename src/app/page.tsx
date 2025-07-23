@@ -71,7 +71,7 @@ export default function HomePage() {
 
   return (
   <>
-    <main>
+    <main className="site-container">
       {/* Full-width slideshow at top */}
       <div className="slideshow-container">
         <Image
@@ -106,14 +106,18 @@ export default function HomePage() {
       <section className="info-row">
         <div className="text-column">
           <div className="text-content">
-            <p>
-              A three day ~festival~ in the beautiful Hudson Valley. Communal meals, music + dancing, activities, camping, excursions to nearby attractions, and overall silly times. Come for a few hours or the whole weekend long!
-            </p>
+            <div className="accent-bar-wrapper">
+  <div className="accent-bar top-bar"></div>
+  <p className="accented-text">
+    A three day ~festival~ in the beautiful Hudson Valley. Communal meals, music + dancing, activities, camping, excursions to nearby attractions, and overall silly times. Come for a few hours or the whole weekend long!
+  </p>
+  <div className="accent-bar bottom-bar"></div>
+</div>
           </div>
 
           <section className="support-map-section">
             <div className="map-title">
-              <h3>Where we at:</h3>
+              <h2>Where we at:</h2>
             </div>
             <div className="map-wrapper">
               <iframe

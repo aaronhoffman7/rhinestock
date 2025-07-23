@@ -14,8 +14,11 @@ export default function InterestPage() {
   return (
     <>
 
-<main>
-  <h3>Let us help u</h3>
+<main className="site-container">
+  
+ <h2 style={{ fontSize: "2.5rem", margin: "2rem 0 1.5rem" }}>
+  Let us help u
+</h2>
   
   <section>
     <h2>How do I get there?</h2>
@@ -23,7 +26,7 @@ export default function InterestPage() {
   We’re located at 13 Reeder Road, Rhinebeck NY. You can get here by carpool or train: either take  
   <a href="https://www.amtrak.com/tickets/departure.html" target="_blank" rel="noopener noreferrer"> Amtrak from NYC Penn Station to Rhinecliff
   </a> or <a href="https://new.mta.info/schedules/metro-north-railroad" target="_blank" rel="noopener noreferrer">
-    Metro-North from Grand Central Station to Poughkeepsie
+    Metro North from Grand Central Station to Poughkeepsie
   </a>.
 </p>
   </section>

@@ -14,7 +14,7 @@ export default function ItineraryPage() {
     {
       day: "Friday, August 29",
       events: [
-        { time: "5:00 PM on", title: "Arrive Friday if it makes sense for your travel logistics!" },
+        { time: "5:00 PM onward", title: "Arrive Friday if it makes sense for your travel logistics!" },
       ]
     },
     {
@@ -32,7 +32,7 @@ export default function ItineraryPage() {
       events: [
         { time: "9:00 AM", title: "Coffee + chill time" },
         { time: "10:30 AM", title: "brunch!" },
-        { time: "12:30 PM", title: "free play: excursions, hammock naps, etc." },
+        { time: "12:30 PM", title: "free play: excursions, hammock naps, foraging, etc." },
         { time: "8:00 PM", title: "Dinner" },
         { time: "10:00 PM- late", title: "wubz and dubz" }
       ]
@@ -48,7 +48,9 @@ export default function ItineraryPage() {
 
   return (
   <main className="site-container">
-  <h2 className="tagline">Tentative Weekend Itinerary</h2>
+ <h2 style={{ fontSize: "2.5rem", margin: "2rem 0 1.5rem", textAlign: "center" }}>
+  Tentative Weekend Itinerary
+</h2>
   {schedule.map((day, idx) => (
     <section key={idx} className="itinerary-row">
       <div className="itinerary-day">
