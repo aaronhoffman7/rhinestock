@@ -210,7 +210,7 @@ return (
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
-          alert("Thanks for signing up! There's a lot riding on you.... The page will refresh now.");
+          alert("Thanks for signing up! there&apos;s a lot riding on you.... The page will refresh now.");
           setTimeout(() => window.location.reload(), 500);
         }}
         style={{ marginBottom: "3rem" }}
