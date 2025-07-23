@@ -55,6 +55,9 @@ const ACTIVITY_SLOTS: SlotMap = {
   sunday_morning: { day: "Sunday", label: "Morning Activity", capacity: 2 },
 };
 
+
+
+
 const JSON_URL =
   "https://script.google.com/macros/s/AKfycbxKgJqAOxjdC_qnrJ2G8XeiXWspGpdj0scsdbORLrW541WJRPfoZrM1HstpoNvIgrKf/exec";
 
@@ -168,6 +171,9 @@ export default function SignUpsClient() {
   const carpoolGroups = buildCarpool(signUps);
   const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
   const [activityDescription, setActivityDescription] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+const [selectedDriver, setSelectedDriver] = useState("");
+
 
 
   function renderColumn(slotMap: SlotMap, filled: Record<string, string[]>, heading: string) {
@@ -252,55 +258,55 @@ return (
 
 <label>
   <p>Time:</p>
-  <select name="time" required>
-    <option value="">-- Select a Time Slot --</option>
-   {Object.entries(
-  selectedSlotType === "Grilling"
-    ? GRILL_SLOTS
-    : selectedSlotType === "DJ"
-    ? DJ_SLOTS
-    : selectedSlotType === "Activity"
-    ? ACTIVITY_SLOTS
-: {
-  from_dc_fri: {
-    label: "Leaving from DC",
-    capacity: 999,
-    day: "Friday",
-  },
-  from_nyc_fri: {
-    label: "Leaving from NYC",
-    capacity: 999,
-    day: "Friday",
-  },
-  from_dc_sat: {
-    label: "Leaving from DC",
-    capacity: 999,
-    day: "Saturday",
-  },
-  from_nyc_sat: {
-    label: "Leaving from NYC",
-    capacity: 999,
-    day: "Saturday",
-  },
-  to_dc_mon: {
-    label: "Returning to DC",
-    capacity: 999,
-    day: "Monday",
-  },
-  to_nyc_mon: {
-    label: "Returning to NYC",
-    capacity: 999,
-    day: "Monday",
-  },
-}
-
-).map(([key, entry]) => (
-  <option key={key} value={key}>
-    {entry.day} – {entry.label}
-  </option>
-))}
-  </select>
+  <select
+  name="time"
+  required
+  value={selectedTime}
+  onChange={(e) => {
+    setSelectedTime(e.target.value);
+    setSelectedDriver(""); // reset driver when time changes
+  }}
+>
+  <option value="">-- Select a Time Slot --</option>
+  {Object.entries(
+    selectedSlotType === "Grilling"
+      ? GRILL_SLOTS
+      : selectedSlotType === "DJ"
+      ? DJ_SLOTS
+      : selectedSlotType === "Activity"
+      ? ACTIVITY_SLOTS
+      : {
+          from_dc_fri: { day: "Friday", label: "Leaving from DC", capacity: 999 },
+          from_nyc_fri: { day: "Friday", label: "Leaving from NYC", capacity: 999 },
+          from_dc_sat: { day: "Saturday", label: "Leaving from DC", capacity: 999 },
+          from_nyc_sat: { day: "Saturday", label: "Leaving from NYC", capacity: 999 },
+          to_dc_mon: { day: "Monday", label: "Returning to DC", capacity: 999 },
+          to_nyc_mon: { day: "Monday", label: "Returning to NYC", capacity: 999 },
+        }
+  ).map(([key, entry]) => (
+    <option key={key} value={key}>
+      {entry.day} – {entry.label}
+    </option>
+  ))}
+</select>
 </label>
+
+  {selectedSlotType === "Rider" && selectedTime && (
+  <label>
+    <p>Driver of Choice:</p>
+    <select name="preferredDriver" value={selectedDriver} onChange={(e) => setSelectedDriver(e.target.value)} required>
+      <option value="">-- Select a Driver --</option>
+      {signUps
+        .filter((s) => s.slotType === "Driver" && s.time === selectedTime)
+        .map((driver, index) => (
+          <option key={index} value={driver.name}>
+            {driver.name}
+          </option>
+        ))}
+    </select>
+    <input type="hidden" name="preferredDriver" value={selectedDriver} />
+  </label>
+)}
 
         <br /><br />
 
