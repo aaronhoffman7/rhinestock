@@ -56,7 +56,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbyi1P0Q95WPO9qdNd-JU7CHhMl-tTYgfEnq1sMZbrSRSUb1NA7GTNXe1xSyzVCFj2U4/exec";
+  "https://script.google.com/macros/s/AKfycbyPtDCaiq6GSBjszpPM7HMpYayaDOTiqPD21QsARHr2thCA5uxqkZbNTMRxEwZJXpex/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -205,7 +205,8 @@ return (
 
       {/* === SIGN-UP FORM === */}
       <form
-        action="https://script.google.com/macros/s/AKfycbxPY05vXtt02iunZtgeKeRoBsR1A6h2SFwPPBIZqG61PknkolvfTlQ2pbegLigR61z6/exec"
+    
+        action="https://script.google.com/macros/s/AKfycbyPtDCaiq6GSBjszpPM7HMpYayaDOTiqPD21QsARHr2thCA5uxqkZbNTMRxEwZJXpex/exec"
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
@@ -214,6 +215,8 @@ return (
         }}
         style={{ marginBottom: "3rem" }}
       >
+      <input type="hidden" name="activityDescription" value={activityDescription} />
+
         <label>
   <p>Name:</p>
   <input type="text" name="name" required />
@@ -235,17 +238,16 @@ return (
   </select>
 </label>
 
-{selectedSlotType === "Activity" && (
-  <label>
-    <p>Activity Description (e.g. type of workshop):</p>
-    <input
-      type="text"
-      name="activityDescription" 
-      value={activityDescription}
-      onChange={(e) => setActivityDescription(e.target.value)}
-      required
-    />
-  </label>
+ {selectedSlotType === "Activity" && (
+    <label>
+      <p>Activity Description (e.g. type of workshop):</p>
+      <input
+        type="text"
+        value={activityDescription}
+        onChange={(e) => setActivityDescription(e.target.value)}
+        required
+      />
+    </label>
 )}
 
 <label>
