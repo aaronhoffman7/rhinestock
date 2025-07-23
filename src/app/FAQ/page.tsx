@@ -34,7 +34,7 @@ export default function InterestPage() {
 
   <section>
     <h2>What should I bring?</h2>
-    <p>Tent + camping supplies if applicable, bathing suit, closed toed shoes for potential walks or mini-hikes, fun food + drinks if you'd like, special skills + craft supplies, toys and games, silly outfits- the world is your oyster.</p>
+    <p>Tent + camping supplies if applicable, bathing suit, closed toed shoes for potential walks or mini-hikes, fun food + drinks if you&apos;d like, special skills + craft supplies, toys and games, silly outfits- the world is your oyster.</p>
   </section>
 
   <section>
