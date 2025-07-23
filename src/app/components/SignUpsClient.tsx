@@ -56,7 +56,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbw6EEz1c20u7zfpP__1YlDslhqrTqQRXBI80v3dDjhCzqGLbakQEL19G49A3H4jMtEj/exec";
+  "https://script.google.com/macros/s/AKfycbwaNKV63fochYjASnLD8pwyIUdpaOEWLo914RCkZMF8wu2IzmaUHpsd72Ep_mODXotr/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -206,7 +206,7 @@ return (
       {/* === SIGN-UP FORM === */}
       <form
     
-        action="https://script.google.com/macros/s/AKfycbw6EEz1c20u7zfpP__1YlDslhqrTqQRXBI80v3dDjhCzqGLbakQEL19G49A3H4jMtEj/exec"
+        action="https://script.google.com/macros/s/AKfycbwaNKV63fochYjASnLD8pwyIUdpaOEWLo914RCkZMF8wu2IzmaUHpsd72Ep_mODXotr/exec"
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
