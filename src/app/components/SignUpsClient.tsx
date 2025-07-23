@@ -56,7 +56,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbyPtDCaiq6GSBjszpPM7HMpYayaDOTiqPD21QsARHr2thCA5uxqkZbNTMRxEwZJXpex/exec";
+  "https://script.google.com/macros/s/AKfycbw6EEz1c20u7zfpP__1YlDslhqrTqQRXBI80v3dDjhCzqGLbakQEL19G49A3H4jMtEj/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -206,7 +206,7 @@ return (
       {/* === SIGN-UP FORM === */}
       <form
     
-        action="https://script.google.com/macros/s/AKfycbyPtDCaiq6GSBjszpPM7HMpYayaDOTiqPD21QsARHr2thCA5uxqkZbNTMRxEwZJXpex/exec"
+        action="https://script.google.com/macros/s/AKfycbw6EEz1c20u7zfpP__1YlDslhqrTqQRXBI80v3dDjhCzqGLbakQEL19G49A3H4jMtEj/exec"
         method="POST"
         target="hidden_iframe"
         onSubmit={() => {
@@ -378,5 +378,5 @@ const labelMap: Record<string, string> = {
       </div> {/* ends carpool signup-column */}
     </div> {/* ends dual-column */}
 </main>
-);       // ✅ Add this line!
-} // <-- ✅ This was missing
+);      
+} 
