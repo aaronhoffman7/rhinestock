@@ -725,8 +725,8 @@
 
   .accent-bar {
     height: 8px;
-    background-color: #FFD700; /* bright yellow */
-    width: 100px;
+    background-color: #ea960f; /* bright yellow */
+    width: 120px;
     margin: 0 auto;
   }
 
@@ -744,3 +744,51 @@
     max-width: 1400px;
     margin: 0 auto;
   }
+.rsvp-button {
+  display: inline-block;
+  padding: 1rem 5rem;
+  background-color: var(--myForestGreen);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 5px;
+  border-radius: 30rem;
+  text-decoration: none;
+  box-shadow: 0 0 70px rgb(6, 85, 46); /* blurred glow */
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rsvp-button:hover {
+  transform: scale(1.07);
+  background-color: #000000;
+  box-shadow: 0 0 30px rgba(21, 154, 88, 0.8);
+}
+
+.excursion-grid {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.excursion-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.excursion-text h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.excursion-text p {
+  margin: 0;
+  color: #444;
+}
+
+.excursion-image {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  border-radius: 1rem;
+}

@@ -115,6 +115,18 @@ export default function HomePage() {
 </div>
           </div>
 
+        <div style={{ textAlign: "center", margin: "2rem 0" }}>
+  <a
+    href="https://partiful.com/e/8csKKrW1mCuXcfe2P708"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="rsvp-button"
+  >
+    RSVP Here
+  </a>
+</div>
+
+
           <section className="support-map-section">
             <div className="map-title">
               <h2>Where we at:</h2>

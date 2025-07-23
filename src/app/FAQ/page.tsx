@@ -23,7 +23,8 @@ export default function InterestPage() {
   <section>
     <h2>How do I get there?</h2>
 <p>
-  We’re located at 13 Reeder Road, Rhinebeck NY. You can get here by carpool or train: either take  
+  We’re located at <a href="https://maps.app.goo.gl/dNo3qX9ordSLAPsz6" target="_blank" rel="noopener noreferrer"> 13 Reeder Road, Rhinebeck, NY.
+  </a> You can get here by <a href="/signups#carpool">carpool</a> or train: either take  
   <a href="https://www.amtrak.com/tickets/departure.html" target="_blank" rel="noopener noreferrer"> Amtrak from NYC Penn Station to Rhinecliff
   </a> or <a href="https://new.mta.info/schedules/metro-north-railroad" target="_blank" rel="noopener noreferrer">
     Metro North from Grand Central Station to Poughkeepsie
@@ -33,7 +34,7 @@ export default function InterestPage() {
 
   <section>
     <h2>What should I bring?</h2>
-    <p>Tent + camping supplies if applicable, bathing suit, closed toed shoes for potential walks or mini-hikes, special skills + craft supplies to share, toys and games, silly outfits!</p>
+    <p>Tent + camping supplies if applicable, bathing suit, closed toed shoes for potential walks or mini-hikes, fun food + drinks if you'd like, special skills + craft supplies, toys and games, silly outfits- the world is your oyster.</p>
   </section>
 
   <section>
@@ -42,13 +43,13 @@ export default function InterestPage() {
   </section>
 
   <section>
-    <h2>Can I bring friends or kids?</h2>
-    <p>Yes! This is a space for everyone. Friends, kids, and other companions are welcome — just let us know so we can prepare.</p>
+    <h2>Can I bring friends?</h2>
+    <p>Yeah! Just let us know and have them RSVP so we can prepare.</p>
   </section>
 
   <section>
     <h2>How do I stay updated?</h2>
-    <p>idk man ask aaron or elliot</p>
+    <p>Hit up Aaron: 845-489-5465  or  Elliot: 845-489-2973, and keep your Partiful text notifications on</p>
   </section>
 </main>
     </>
