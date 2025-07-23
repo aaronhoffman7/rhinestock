@@ -13,10 +13,22 @@ export default function ExcursionsPage() {
 
   const excursions = [
     {
-      name: "Swimming at a local hole",
-      description: "A refreshing dip in a lesser-known local swim spot. Cold water guaranteed.",
-      image: "/photos/hole.jpg"
-    },
+  name: "Swimming at a local hole",
+  description: (
+    <>
+      Take a dip at a{" "}
+      <a
+        href="https://maps.app.goo.gl/nsFmLsj4EZfRv8YY7"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        local spot
+      </a>
+      . Cold water guaranteed.
+    </>
+  ),
+  image: "/photos/hole.jpg"
+},
     {
       name: "Hiking in Ferncliff Forest / Blithewood",
       description: "Short but magical hike with a fire tower offering a panoramic Hudson Valley view.",
@@ -31,21 +43,6 @@ export default function ExcursionsPage() {
       name: "Rhinebeck Farmers Market",
       description: "Sunday morning market with local produce, prepared food, music, and crafts.",
       image: "/photos/market.jpg"
-    },
-    {
-      name: "Walkway Over the Hudson",
-      description: "A scenic half-mile walk through tidal marshland to a historic lighthouse on the Hudson.",
-      image: "/photos/walkway.jpg"
-    },
-    {
-      name: "Local nightlife",
-      description: "Not much but there are a couple funky bars with music and cheap beer.",
-      image: "/photos/nightlife.jpg"
-    },
-    {
-      name: "Mystery spot",
-      description: "A surprise location for the adventurous. Details revealed on-site.",
-      image: "/photos/mystery.jpg"
     }
   ];
 

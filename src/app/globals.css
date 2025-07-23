@@ -117,10 +117,10 @@
 
 
   footer {
-    background: linear-gradient(0deg, var(--rdSkyBlue) 20%, transparent 100%);
+    background: linear-gradient(0deg, var(--rdSkyBlue) 30%, transparent 100%);
     text-align: center;
-    padding: 1em;
-    margin-top: 0em;
+    padding: 2em;
+    margin-top: 2em;
     position: relative;
     z-index: 1;
   }
