@@ -109,7 +109,13 @@ export default function HomePage() {
             <div className="accent-bar-wrapper">
   <div className="accent-bar top-bar"></div>
   <p className="accented-text">
-    A three day ~festival~ in the beautiful Hudson Valley. Communal meals, music + dancing, activities, camping, excursions to nearby attractions, and overall silly times. Come for a few hours or the whole weekend long!
+    A three day extravaganza in the beautiful Hudson Valley.
+  </p>
+    <p className="accented-text">
+    Communal meals, music + dancing, activities, camping, excursions to nearby attractions, and silly times.
+  </p>
+    <p className="accented-text">
+    Come for a few hours or the whole weekend long!
   </p>
   <div className="accent-bar bottom-bar"></div>
 </div>

@@ -745,10 +745,11 @@
   }
 
   .accented-text {
-    font-size: 1.7rem;
+    font-size: 1.9rem;
     line-height: 1.6;
     max-width: 1400px;
     margin: 0 auto;
+    text-align: center;
   }
 .rsvp-button {
   display: inline-block;
