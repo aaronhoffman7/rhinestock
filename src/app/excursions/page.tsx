@@ -56,7 +56,7 @@ export default function ExcursionsPage() {
       </h2>
       <div className="text-column">
         <p style={{ marginBottom: "2.3rem" }}>
-          Explore the Hudson Valley! These are a few nearby options we’re excited about — totally optional,
+          Explore the Hudson Valley! These are a few nearby options were excited about — totally optional,
           but available if you want to break out for a mini adventure.
         </p>
 
