@@ -7,10 +7,14 @@ import Footer from "./components/Footer";
 import ShootingStars from "./components/ShootingStars";
 import { Analytics } from '@vercel/analytics/react';
 
+
 export const metadata: Metadata = {
   title: "Rhinestock",
   description:
     "First annual woooooooo",
+    icons: {
+    icon: "/photos/acid.jpg",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
