@@ -37,8 +37,14 @@ export default function InterestPage() {
 
   <section>
     <h2>Where can I sleep?</h2>
-    <p>There are two queen beds, three twins, a bunch of couches, and lots of floor space for mattresses + sleeping pads. Other than that, there is plenty of space to pitch a tent or hammock anywhere on the property.</p>
+    <p>There are a limited number of mostly twin beds, plus a bunch of couches, and lots of floor space for mattresses + sleeping pads. Other than that, there is plenty of space to pitch a tent or hammock anywhere on the property.</p>
   </section>
+
+  <section>
+    <h2>What's the food situation?</h2>
+    <p>There&apos;s a full kitchen and grill, lol this is a house. We&apos;ll plan on cooking as much as possible, but might do some brunch / lunch out and about. The kitchen will be stocked with lots of ingredients - covering a variety of dietary specifications - but please reach out if you&apos;d like to help with the shopping list, and feel free to bring any food items you&apos;d like.</p>
+  </section>
+
 
   <section>
     <h2>Can I bring friends?</h2>
@@ -48,6 +54,11 @@ export default function InterestPage() {
   <section>
     <h2>How do I stay updated?</h2>
     <p>Hit up Aaron: 845-489-5465  or  Elliot: 845-489-2973, and keep your Partiful text notifications on</p>
+  </section>
+
+  <section>
+    <h2>Should I take the brown acid?</h2>
+    <p>Probably not but use your best judgement</p>
   </section>
 </main>
     </>
