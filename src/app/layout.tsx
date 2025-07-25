@@ -5,7 +5,7 @@ import { PageTitleProvider } from "./context/PageTitleContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ShootingStars from "./components/ShootingStars";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
   title: "Rhinestock",
@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PageTitleProvider>
           <Header title="Rhinestock" />
           <main>{children}</main>
+          <Analytics />
           <div id="star-container" />
           <ShootingStars />
           <Footer />
