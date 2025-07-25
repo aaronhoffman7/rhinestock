@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "First annual woooooooo",
     icons: {
-    icon: "/photos/acid.jpg",
+    icon: "/photos/favicon.ico",
   },
 };
 
