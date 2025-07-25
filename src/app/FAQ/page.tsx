@@ -41,7 +41,7 @@ export default function InterestPage() {
   </section>
 
   <section>
-    <h2>What's the food situation?</h2>
+    <h2>What&apos;s the food situation?</h2>
     <p>There&apos;s a full kitchen and grill, lol this is a house. We&apos;ll plan on cooking as much as possible, but might do some brunch / lunch out and about. The kitchen will be stocked with lots of ingredients - covering a variety of dietary specifications - but please reach out if you&apos;d like to help with the shopping list, and feel free to bring any food items you&apos;d like.</p>
   </section>
 
