@@ -5,6 +5,7 @@ import { PageTitleProvider } from "./context/PageTitleContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ShootingStars from "./components/ShootingStars";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "Rhinestock",
