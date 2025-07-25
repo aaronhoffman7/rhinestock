@@ -30,32 +30,34 @@ type SlotEntry = {
 type SlotMap = Record<string, SlotEntry>;
 
 const GRILL_SLOTS: SlotMap = {
-  friday_6pm: { day: "Friday", label: "6:00 PM", capacity: 1 },
+  friday_6pm: { day: "Friday", label: "6:00 PM", capacity: 3 },
   saturday_5pm: { day: "Saturday", label: "5:00 PM", capacity: 4 },
   saturday_6pm: { day: "Saturday", label: "6:00 PM", capacity: 4 },
-  sunday_2pm: { day: "Sunday", label: "2:00 PM", capacity: 1 },
+  sunday_2pm: { day: "Sunday", label: "2:00 PM", capacity: 3 },
 };
 
 const DJ_SLOTS: SlotMap = {
-  friday_10pm: { day: "Friday", label: "10:00 PM", capacity: 2 },
-  friday_11pm: { day: "Friday", label: "11:00 PM", capacity: 2 },
-  friday_12pm: { day: "Friday", label: "12:00 PM", capacity: 2 },
-  friday_1am: { day: "Friday", label: "1:00 AM", capacity: 2 },
-  friday_2am: { day: "Friday", label: "2:00 AM (late night)", capacity: 2 },
-  friday_3am: { day: "Friday", label: "3:00 AM (late night)", capacity: 2 },
-  saturday_sunset: { day: "Saturday", label: "Sunset Sessions – 6:30 PM", capacity: 2 },
-  saturday_10pm: { day: "Saturday", label: "10:00 PM", capacity: 2 },
-  saturday_11pm: { day: "Saturday", label: "11:00 PM", capacity: 2 },
-  saturday_12am: { day: "Saturday", label: "12:00 AM", capacity: 2 },
-  saturday_1am: { day: "Saturday", label: "1:00 AM", capacity: 2 },
-  saturday_2am: { day: "Saturday", label: "2:00 AM", capacity: 2 },
-  saturday_3am: { day: "Saturday", label: "3:00 AM", capacity: 2 },
+  friday_10pm: { day: "Friday", label: "10:00 PM", capacity: 1 },
+  friday_11pm: { day: "Friday", label: "11:00 PM", capacity: 1 },
+  friday_12am: { day: "Friday", label: "12:00 AM", capacity: 1 },
+  friday_1am: { day: "Friday", label: "1:00 AM", capacity: 1 },
+  friday_2am: { day: "Friday", label: "2:00 AM (late night)", capacity: 1 },
+  friday_3am: { day: "Friday", label: "3:00 AM (late night)", capacity: 1 },
+  saturday_sunset: { day: "Saturday", label: "Sunset Sessions – 6:30 PM", capacity: 1 },
+  saturday_10pm: { day: "Saturday", label: "10:00 PM", capacity: 1 },
+  saturday_11pm: { day: "Saturday", label: "11:00 PM", capacity: 1 },
+  saturday_12am: { day: "Saturday", label: "12:00 AM", capacity: 1 },
+  saturday_1am: { day: "Saturday", label: "1:00 AM", capacity: 1 },
+  saturday_2am: { day: "Saturday", label: "2:00 AM", capacity: 1 },
+  saturday_3am: { day: "Saturday", label: "3:00 AM", capacity: 1 },
   sunday_930am: { day: "Sunday", label: "9:30 AM", capacity: 1 },
 };
 
 const ACTIVITY_SLOTS: SlotMap = {
-  saturday_afternoon: { day: "Saturday", label: "Afternoon Workshop", capacity: 3 },
-  sunday_morning: { day: "Sunday", label: "Morning Activity", capacity: 2 },
+  saturday_morning: { day: "Saturday", label: "Morning Activities", capacity: 3 },
+  saturday_afternoon: { day: "Saturday", label: "Afternoon Activities", capacity: 3 },
+  sunday_morning: { day: "Sunday", label: "Morning Activities", capacity: 3 },
+  sunday_afternoon: { day: "Sunday", label: "Afternoon Activities", capacity: 3 },
 };
 
 const JSON_URL =
@@ -253,7 +255,7 @@ export default function SignUpsClient() {
 
           {selectedSlotType === "Activity" && (
             <label>
-              <p>Activity Description (e.g. type of workshop):</p>
+              <p>Activity Description:</p>
               <input
                 type="text"
                 value={activityDescription}
