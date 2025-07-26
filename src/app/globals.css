@@ -698,7 +698,7 @@
 
     .map-embed iframe {
       height: auto;
-      min-height: 400px; /* or more */
+      min-height: 600px; /* or more */
     }
 
     .name-list,
@@ -714,7 +714,7 @@
     flex-direction: column !important;
     align-items: center;
     gap: 1.5rem;
-    text-align: center; /* center-align text for mobile */
+    text-align: left; /* center-align text for mobile */
   }
 
   .itinerary-photo {
@@ -737,8 +737,8 @@
   }
 
   .itinerary-events {
-    width: 100%;
-    text-align: center;
+    width: 90%;
+    text-align: left;
   }
 
   .itinerary-events ul {
