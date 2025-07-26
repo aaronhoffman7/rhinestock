@@ -21,7 +21,7 @@ export default function HomePage() {
 
   useEffect(() => {
   const phrases = [
-    "August 30th – September 1st, 2025",
+    "August 29th – September 1st, 2025",
     "Rhinebeck, NY"
   ];
   const timeouts: NodeJS.Timeout[] = [];
