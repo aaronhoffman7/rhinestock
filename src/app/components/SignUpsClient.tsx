@@ -9,6 +9,8 @@ type SignUp = {
   time: string;
   phoneNumber?: string;
   extraSpots?: number;
+  driver?: string; // rider's selected driver
+
 };
 
 type RawSignUpRow = {
@@ -19,6 +21,7 @@ type RawSignUpRow = {
   activityDescription?: string;
   PhoneNumber?: string;
   ExtraSpots?: string;
+  preferredDriver?: string; // <-- NEW
 };
 
 type SlotEntry = {
@@ -61,7 +64,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbx019gT7-xWj_vhQVnkPhD3NN-Asrm5VOHShx6OHPe0Xji-LrqwI3mvIvv2374ZvbgM/exec";
+  "https://script.google.com/macros/s/AKfycbybvsmHdVaEu3mWKbxVKenACqynk2pwYMQNmr1aFd5J3LQTvmonNTmPzbzBb8R1zsY6/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -104,6 +107,7 @@ export default function SignUpsClient() {
             time: trimmedTime,
             phoneNumber: row.PhoneNumber || undefined, // now optional
             extraSpots: row.ExtraSpots ? parseInt(row.ExtraSpots) : undefined,
+            driver: row.preferredDriver || undefined // <-- NEW
           };
         })
         .filter((entry): entry is SignUp => entry !== null);
@@ -367,12 +371,20 @@ export default function SignUpsClient() {
               >
                 <option value="">-- Select a Driver --</option>
                 {signUps
-                  .filter((s) => s.slotType === "Driver" && s.time === selectedTime)
-                  .map((driver, index) => (
-                    <option key={index} value={driver.name}>
-                      {driver.name}
-                    </option>
-                  ))}
+  .filter((s) => s.slotType === "Driver" && s.time === selectedTime)
+  .map((driver, index) => {
+    const ridersForDriver = signUps.filter(
+      (s) => s.slotType === "Rider" && s.time === selectedTime && s.driver === driver.name
+    ).length;
+
+    const availableSeats = (driver.extraSpots || 0) - ridersForDriver;
+
+    return (
+      <option key={index} value={driver.name} disabled={availableSeats <= 0}>
+        {driver.name} ({availableSeats > 0 ? `${availableSeats} seats left` : "Full"})
+      </option>
+    );
+  })}
               </select>
               <input type="hidden" name="preferredDriver" value={selectedDriver} />
             </label>
