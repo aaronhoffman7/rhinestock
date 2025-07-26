@@ -229,7 +229,7 @@ export default function SignUpsClient() {
               required
             >
               <option value="">-- Select an Option --</option>
-              <option value="Grilling">Food Prep + Grill</option>
+              <option value="Food Prep + Grill">Food Prep + Grill</option>
               <option value="Driver">Carpool Driver</option>
               <option value="Rider">Carpool Rider</option>
               <option value="Activity">Activity Host</option>
