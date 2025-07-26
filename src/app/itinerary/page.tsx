@@ -30,7 +30,7 @@ export default function ItineraryPage() {
       },
         { time: "5:00 PM", title: "Dinner prep" },
         { time: "6:00 PM", title: "grillin, chillin, sunset dance party" },
-        { time: "10:00 PM to late", title: "use ur imagination" }
+        { time: "10:00 PM to late", title: "use ur imagination, rumor of possible Skrillex B2B Dead & Co set" }
       ]
     },
     {
