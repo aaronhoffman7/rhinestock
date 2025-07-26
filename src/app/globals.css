@@ -693,12 +693,12 @@
     }
 
     .map-wrapper {
-      padding-top: 85%; /* shorter map on mobile */
+      padding-top: 100%; /* shorter map on mobile */
     }
 
     .map-embed iframe {
       height: auto;
-      min-height: 600px; /* or more */
+      min-height: 800px; /* or more */
     }
 
     .name-list,
