@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 type SignUp = {
   timestamp: string;
   name: string;
-  slotType: "Grilling" | "DJ" | "Driver" | "Rider" | "Activity" | "I have a tent";
+  slotType:  "Food Prep + Grill" | "Driver" | "Rider" | "Activity" | "I have a tent";
   time: string;
   phoneNumber?: string;
   extraSpots?: number;
@@ -27,33 +27,17 @@ type RawSignUpRow = {
 type SlotEntry = {
   label: string;
   capacity: number;
-  day: "Friday" | "Saturday" | "Sunday";
+  day: "Friday" | "Saturday" | "Sunday" | "Monday";
 };
 
 type SlotMap = Record<string, SlotEntry>;
 
 const GRILL_SLOTS: SlotMap = {
-  friday_6pm: { day: "Friday", label: "6:00 PM", capacity: 3 },
-  saturday_5pm: { day: "Saturday", label: "5:00 PM", capacity: 4 },
-  saturday_6pm: { day: "Saturday", label: "6:00 PM", capacity: 4 },
-  sunday_2pm: { day: "Sunday", label: "2:00 PM", capacity: 3 },
-};
-
-const DJ_SLOTS: SlotMap = {
-  friday_10pm: { day: "Friday", label: "10:00 PM", capacity: 1 },
-  friday_11pm: { day: "Friday", label: "11:00 PM", capacity: 1 },
-  friday_12am: { day: "Friday", label: "12:00 AM", capacity: 1 },
-  friday_1am: { day: "Friday", label: "1:00 AM", capacity: 1 },
-  friday_2am: { day: "Friday", label: "2:00 AM (late night)", capacity: 1 },
-  friday_3am: { day: "Friday", label: "3:00 AM (late night)", capacity: 1 },
-  saturday_sunset: { day: "Saturday", label: "Sunset Sessions – 6:30 PM", capacity: 1 },
-  saturday_10pm: { day: "Saturday", label: "10:00 PM", capacity: 1 },
-  saturday_11pm: { day: "Saturday", label: "11:00 PM", capacity: 1 },
-  saturday_12am: { day: "Saturday", label: "12:00 AM", capacity: 1 },
-  saturday_1am: { day: "Saturday", label: "1:00 AM", capacity: 1 },
-  saturday_2am: { day: "Saturday", label: "2:00 AM", capacity: 1 },
-  saturday_3am: { day: "Saturday", label: "3:00 AM", capacity: 1 },
-  sunday_930am: { day: "Sunday", label: "9:30 AM", capacity: 1 },
+  friday_6pm: { day: "Friday", label: "6:00 PM", capacity: 6 },
+  saturday_5pm: { day: "Saturday", label: "5:00 PM", capacity: 6 },
+  sunday_9am: { day: "Sunday", label: "9:00 AM", capacity: 6 },
+  sunday_5pm: { day: "Sunday", label: "5:00 PM", capacity: 6 },
+  monday_9am: { day: "Monday", label: "9:00 AM", capacity: 6 },
 };
 
 const ACTIVITY_SLOTS: SlotMap = {
@@ -78,9 +62,7 @@ export default function SignUpsClient() {
           const slotTypeRaw = row["Slot Type"]?.toLowerCase();
           const normalizedSlotType =
             slotTypeRaw === "grilling"
-              ? "Grilling"
-              : slotTypeRaw === "dj"
-              ? "DJ"
+              ? "Food Prep + Grill"
               : slotTypeRaw === "driver"
               ? "Driver"
               : slotTypeRaw === "rider"
@@ -119,8 +101,7 @@ export default function SignUpsClient() {
 
   // === Group by slotType and time (for Grill/DJ/Activity only) ===
   const groupedByType: Record<SignUp["slotType"], Record<string, string[]>> = {
-    Grilling: {},
-    DJ: {},
+    "Food Prep + Grill": {},
     Activity: {},
     Driver: {},
     Rider: {},
@@ -128,8 +109,7 @@ export default function SignUpsClient() {
   };
 
   const allSlotMaps = {
-    Grilling: GRILL_SLOTS,
-    DJ: DJ_SLOTS,
+    "Food Prep + Grill": GRILL_SLOTS,
     Activity: ACTIVITY_SLOTS,
   };
 
@@ -179,7 +159,7 @@ export default function SignUpsClient() {
   }
 
   const carpoolGroups = buildCarpool(signUps);
-  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"]>("Grilling");
+  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"] | "">("");
   const [activityDescription, setActivityDescription] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedDriver, setSelectedDriver] = useState("");
@@ -248,8 +228,8 @@ export default function SignUpsClient() {
               onChange={(e) => setSelectedSlotType(e.target.value as SignUp["slotType"])}
               required
             >
-              <option value="Grilling">Grilling</option>
-              <option value="DJ">DJ</option>
+              <option value="">-- Select an Option --</option>
+              <option value="Grilling">Food Prep + Grill</option>
               <option value="Driver">Carpool Driver</option>
               <option value="Rider">Carpool Rider</option>
               <option value="Activity">Activity Host</option>
@@ -259,7 +239,7 @@ export default function SignUpsClient() {
 
           {selectedSlotType === "Activity" && (
             <label>
-              <p>Activity Description:</p>
+              <p>Describe the activity you wanna lead us in:</p>
               <input
                 type="text"
                 value={activityDescription}
@@ -337,10 +317,8 @@ export default function SignUpsClient() {
               >
                 <option value="">-- Select a Time Slot --</option>
                 {Object.entries(
-                  selectedSlotType === "Grilling"
+                  selectedSlotType ===  "Food Prep + Grill"
                     ? GRILL_SLOTS
-                    : selectedSlotType === "DJ"
-                    ? DJ_SLOTS
                     : selectedSlotType === "Activity"
                     ? ACTIVITY_SLOTS
                     : {
@@ -396,16 +374,9 @@ export default function SignUpsClient() {
           <iframe name="hidden_iframe" style={{ display: "none" }}></iframe>
         </form>
 
-        {/* === SIGNUP LISTS === */}
-        <div className="dual-column">
-          {renderColumn(DJ_SLOTS, groupedByType.DJ, "Music + DJ Lineup")}
-          {renderColumn(GRILL_SLOTS, groupedByType.Grilling, "Grilling slots")}
-        </div>
 
-        <div className="dual-column">
-          {renderColumn(ACTIVITY_SLOTS, groupedByType.Activity, "Activities")}
-
-          {/* Carpool Column */}
+<div className="dual-column">
+          {/* Carpool + Tents Column */}
           <div className="signup-column">
             <h2>Carpool</h2>
             {["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].map(
@@ -467,6 +438,14 @@ export default function SignUpsClient() {
               ))}
           </div>
         </div>
+
+        {/* === SIGNUP LISTS === */}
+        <div className="dual-column">
+          {renderColumn(ACTIVITY_SLOTS, groupedByType.Activity, "Activities")}
+          {renderColumn(GRILL_SLOTS, groupedByType["Food Prep + Grill"], "Food Prep + Grill")}
+        </div>
+
+        
       </div>
     </main>
   );

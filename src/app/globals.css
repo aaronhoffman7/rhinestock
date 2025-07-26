@@ -533,35 +533,60 @@
 }
 
   .itinerary-main {
-    max-width: 1400px; /* or 1400px if you want it even wider */
+    max-width: 1000px; /* or 1400px if you want it even wider */
     margin: 2rem auto;
     padding: 0 2rem;   /* horizontal breathing room */
   }
 
+.itinerary-row {
+  margin-bottom: 2rem;
+}
 
-  .itinerary-day {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3rem;
-    align-items: flex-start;
-    margin-bottom: 2rem;
-  }
+.itinerary-day {
+  display: flex;
+  align-items: flex-start;  /* align top edges */
+  gap: 2rem;
+  flex-wrap: nowrap;        /* prevent photo and text from stacking */
+}
 
-  .itinerary-date {
-    flex: 0 0 250px;
-    margin-right: 0rem;
-  }
+/* Photo sizing */
+.itinerary-photo {
+  flex: 0 0 500px;  /* fixed width column */
+}
 
-  .itinerary-events {
-    flex: 1;
-  }
+.itinerary-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
 
-  .itinerary-row {
-    margin: 0 auto 2.5rem auto;
-    padding: 0 2rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
+/* Events column grows and wraps text around the fixed photo column */
+.itinerary-events {
+  flex: 1;
+  min-width: 0;     /* prevent overflow */
+}
+
+.itinerary-row.right .itinerary-day {
+  flex-direction: row-reverse;  /* flip alignment for Saturday + Monday */
+  text-align: left;
+}
+
+.itinerary-row.left .itinerary-day {
+  flex-direction: row;
+  text-align: left;
+}
+
+.itinerary-events ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.itinerary-events li p {
+  margin: 0.3rem 0;
+}
+
 
   /* -------------------------------
     RESPONSIVE ENHANCEMENTS (Mobile + Tablet)

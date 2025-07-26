@@ -46,8 +46,7 @@ function renderWiggleText(text: string) {
     </div>
     <nav>
       <Link href="/">Home</Link>
-      <Link href="/itinerary">Itinerary</Link>
-      <Link href="/excursions">Excursions</Link>
+      <Link href="/itinerary">Schedule</Link>
       <Link href="/signups">Signups</Link>
       <Link href="/FAQ">FAQ</Link>
       
