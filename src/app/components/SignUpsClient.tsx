@@ -61,7 +61,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbzIRaHT6d_dW1Ek3gzVQHTEsKcN6ne1QHoL02w2LvzUxaF6MbKgxAY4UycWofEXe-kO/exec";
+  "https://script.google.com/macros/s/AKfycbx019gT7-xWj_vhQVnkPhD3NN-Asrm5VOHShx6OHPe0Xji-LrqwI3mvIvv2374ZvbgM/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -290,6 +290,33 @@ export default function SignUpsClient() {
               </label>
             </>
           )}
+
+          {selectedSlotType === "Driver" && (
+  <>
+    <label>
+      <p>Your phone number:</p>
+      <input
+        type="tel"
+        name="driverPhoneNumber"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+        required
+      />
+    </label>
+    <label>
+      <p>How many extra seats in your car?</p>
+      <input
+        type="number"
+        name="driverExtraSeats"
+        value={extraSpots}
+        onChange={(e) => setExtraSpots(Number(e.target.value))}
+        min={0}
+        required
+      />
+    </label>
+  </>
+)}
+
 
           {/* Hide time dropdown for tents */}
           {selectedSlotType !== "I have a tent" && (
