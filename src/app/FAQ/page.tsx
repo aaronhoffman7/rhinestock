@@ -26,7 +26,7 @@ export default function InterestPage() {
   We&apos;re located at <a href="https://maps.app.goo.gl/dNo3qX9ordSLAPsz6" target="_blank" rel="noopener noreferrer"> 13 Reeder Road, Rhinebeck, NY.
   </a> You can get here by <a href="/signups#carpool">carpool</a> or train: either take  
   <a href="https://www.amtrak.com/tickets/departure.html" target="_blank" rel="noopener noreferrer"> Amtrak</a> from NYC Penn Station to Rhinecliff or <a href="https://new.mta.info/schedules/metro-north-railroad" target="_blank" rel="noopener noreferrer">
-    Metro North</a> from Grand Central Station to Poughkeepsie. From either train station you&apos;ll need to get a car to the house. Ubers are still very spotty in the area so we recommend having someone pick you up from the house or local cab service.
+    Metro North</a> from Grand Central Station to Poughkeepsie. From either train station you&apos;ll need to get a car to the house. Ubers are still very spotty in the area so we recommend having someone pick you up from the house or getting a local cab service.
 </p>
   </section>
 
