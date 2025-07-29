@@ -59,7 +59,7 @@ export default function SignUpsClient() {
     .then((rows: RawSignUpRow[]) => {
       const parsed: SignUp[] = rows
         .map((row): SignUp | null => {
-          const slotTypeRaw = row["Slot Type"]?.toLowerCase();
+          const slotTypeRaw = row["Slot Type"]?.trim();
           const normalizedSlotType =
             slotTypeRaw === "Food Prep + Grill"
               ? "Food Prep + Grill"
