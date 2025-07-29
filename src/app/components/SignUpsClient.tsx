@@ -60,6 +60,7 @@ export default function SignUpsClient() {
       const parsed: SignUp[] = rows
         .map((row): SignUp | null => {
           const slotTypeRaw = row["Slot Type"]?.trim();
+          console.log("RAW SLOT TYPE:", slotTypeRaw); // 👈 ADD THIS
           const normalizedSlotType =
             slotTypeRaw === "Food Prep + Grill"
               ? "Food Prep + Grill"
