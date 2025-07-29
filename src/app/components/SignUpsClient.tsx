@@ -59,20 +59,20 @@ export default function SignUpsClient() {
     .then((rows: RawSignUpRow[]) => {
       const parsed: SignUp[] = rows
         .map((row): SignUp | null => {
-          const slotTypeRaw = row["Slot Type"]?.trim();
-          console.log("RAW SLOT TYPE:", slotTypeRaw); // 👈 ADD THIS
-          const normalizedSlotType =
-            slotTypeRaw === "Food Prep + Grill"
-              ? "Food Prep + Grill"
-              : slotTypeRaw === "driver"
-              ? "Driver"
-              : slotTypeRaw === "rider"
-              ? "Rider"
-              : slotTypeRaw === "activity"
-              ? "Activity"
-              : slotTypeRaw === "i have a tent"
-              ? "I have a tent"
-              : null;
+         const slotTypeRaw = row["Slot Type"]?.trim(); // don't lowercase
+const normalizedSlotType =
+  slotTypeRaw === "Food Prep + Grill"
+    ? "Food Prep + Grill"
+    : slotTypeRaw === "Driver"
+    ? "Driver"
+    : slotTypeRaw === "Rider"
+    ? "Rider"
+    : slotTypeRaw === "Activity"
+    ? "Activity"
+    : slotTypeRaw === "I have a tent"
+    ? "I have a tent"
+    : null;
+
 
           if (!normalizedSlotType) return null;
 
@@ -237,7 +237,6 @@ export default function SignUpsClient() {
               <option value="I have a tent">I have a tent</option>
             </select>
           </label>
-
           {selectedSlotType === "Activity" && (
             <label>
               <p>Describe the activity you wanna lead us in:</p>
