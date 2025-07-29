@@ -51,6 +51,7 @@ const JSON_URL =
   "https://script.google.com/macros/s/AKfycbwNqAJjpDUKWhlAXTsBs7aFU7O3dsp3EiGxNwlS2oT-Tv9X9WOuvm1Hb4s0UMUMKOux/exec";
 
 export default function SignUpsClient() {
+  console.log("🚀 LIVE BUILD VERSION: v3 - " + new Date().toISOString());
   const [signUps, setSignUps] = useState<SignUp[]>([]);
 
   useEffect(() => {
