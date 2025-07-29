@@ -61,7 +61,7 @@ export default function SignUpsClient() {
         .map((row): SignUp | null => {
           const slotTypeRaw = row["Slot Type"]?.toLowerCase();
           const normalizedSlotType =
-            slotTypeRaw === "grilling"
+            slotTypeRaw === "Food Prep + Grill"
               ? "Food Prep + Grill"
               : slotTypeRaw === "driver"
               ? "Driver"
