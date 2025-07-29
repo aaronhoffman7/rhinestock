@@ -132,12 +132,24 @@ export default function SignUpsClient() {
       groupedByType[type as keyof typeof allSlotMaps][key] = [];
     }
   }
-
-  for (const s of signUps) {
-    if (groupedByType[s.slotType] && groupedByType[s.slotType][s.time] !== undefined) {
-      groupedByType[s.slotType][s.time].push(s.name);
-    }
+for (const s of signUps) {
+  // Check if slotType exists in groupedByType
+  if (!groupedByType[s.slotType]) {
+    console.warn("❌ NO MATCH SLOT TYPE:", s.slotType);
+    continue; // skip to the next signup
   }
+
+  // Check if time exists within that slotType
+  if (!(s.time in groupedByType[s.slotType])) {
+    console.warn("❌ NO MATCH TIME:", s.time, "for slotType:", s.slotType);
+    continue;
+  }
+
+  // If both match, push the name
+  console.log("✅ MATCHED:", s.slotType, s.time, "→", s.name);
+  groupedByType[s.slotType][s.time].push(s.name);
+}
+
 
   // === Carpool Logic ===
   type CarpoolSlot = {
