@@ -287,7 +287,7 @@ for (const s of signUps) {
                 />
               </label>
               <label>
-                <p>How many extra spots in your tent?</p>
+                <p>How many extra spots in your tent??</p>
                 <input
                   type="number"
                   name="extraSpotsInput"
