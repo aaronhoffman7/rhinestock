@@ -48,7 +48,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbyWcEU740YCDwedJMoGnA1xy29R4Uu2-Mgu2tzsB7zlUXG5DoOG4rrVHFe8csOTaKOx/exec";
+  "https://script.google.com/macros/s/AKfycbwNqAJjpDUKWhlAXTsBs7aFU7O3dsp3EiGxNwlS2oT-Tv9X9WOuvm1Hb4s0UMUMKOux/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
@@ -59,20 +59,30 @@ export default function SignUpsClient() {
     .then((rows: RawSignUpRow[]) => {
       const parsed: SignUp[] = rows
         .map((row): SignUp | null => {
-         const slotTypeRaw = row["Slot Type"]?.trim(); // don't lowercase
-const normalizedSlotType =
-  slotTypeRaw === "Food Prep + Grill"
-    ? "Food Prep + Grill"
-    : slotTypeRaw === "Driver"
-    ? "Driver"
-    : slotTypeRaw === "Rider"
-    ? "Rider"
-    : slotTypeRaw === "Activity"
-    ? "Activity"
-    : slotTypeRaw === "I have a tent"
-    ? "I have a tent"
-    : null;
+          const slotTypeRaw = row["Slot Type"]?.trim();
 
+          // Normalize capitalization consistently
+          let normalizedSlotType: SignUp["slotType"] | null = null;
+          switch (slotTypeRaw) {
+            case "Food Prep + Grill":
+              normalizedSlotType = "Food Prep + Grill";
+              break;
+            case "Driver":
+              normalizedSlotType = "Driver";
+              break;
+            case "Rider":
+              normalizedSlotType = "Rider";
+              break;
+            case "Activity":
+              normalizedSlotType = "Activity";
+              break;
+            case "I have a tent":
+              normalizedSlotType = "I have a tent";
+              break;
+            default:
+              console.warn("Unmatched Slot Type:", slotTypeRaw);
+              normalizedSlotType = null;
+          }
 
           if (!normalizedSlotType) return null;
 
@@ -88,16 +98,18 @@ const normalizedSlotType =
                 : name,
             slotType: normalizedSlotType,
             time: trimmedTime,
-            phoneNumber: row.PhoneNumber || undefined, // now optional
+            phoneNumber: row.PhoneNumber || undefined,
             extraSpots: row.ExtraSpots ? parseInt(row.ExtraSpots) : undefined,
-            driver: row.preferredDriver || undefined // <-- NEW
+            driver: row.preferredDriver || undefined,
           };
         })
         .filter((entry): entry is SignUp => entry !== null);
 
+      console.log("Parsed signups:", parsed); // debug log
       setSignUps(parsed);
     });
 }, []);
+
 
 
   // === Group by slotType and time (for Grill/DJ/Activity only) ===
