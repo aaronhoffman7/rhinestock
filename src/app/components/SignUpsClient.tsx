@@ -48,7 +48,7 @@ const ACTIVITY_SLOTS: SlotMap = {
 };
 
 const JSON_URL =
-  "https://script.google.com/macros/s/AKfycbybvsmHdVaEu3mWKbxVKenACqynk2pwYMQNmr1aFd5J3LQTvmonNTmPzbzBb8R1zsY6/exec";
+  "https://script.google.com/macros/s/AKfycbyWcEU740YCDwedJMoGnA1xy29R4Uu2-Mgu2tzsB7zlUXG5DoOG4rrVHFe8csOTaKOx/exec";
 
 export default function SignUpsClient() {
   const [signUps, setSignUps] = useState<SignUp[]>([]);
