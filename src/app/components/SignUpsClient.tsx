@@ -5,12 +5,11 @@ import { useEffect, useState } from "react";
 type SignUp = {
   timestamp: string;
   name: string;
-  slotType:  "Food Prep + Grill" | "Driver" | "Rider" | "Activity" | "I have a tent";
+  slotType: "Food Prep + Grill" | "Driver" | "Rider" | "Activity" | "I have a tent";
   time: string;
   phoneNumber?: string;
   extraSpots?: number;
-  driver?: string; // rider's selected driver
-
+  driver?: string;
 };
 
 type RawSignUpRow = {
@@ -21,7 +20,7 @@ type RawSignUpRow = {
   activityDescription?: string;
   PhoneNumber?: string;
   ExtraSpots?: string;
-  preferredDriver?: string; // <-- NEW
+  preferredDriver?: string;
 };
 
 type SlotEntry = {
@@ -51,69 +50,77 @@ const JSON_URL =
   "https://script.google.com/macros/s/AKfycbwNqAJjpDUKWhlAXTsBs7aFU7O3dsp3EiGxNwlS2oT-Tv9X9WOuvm1Hb4s0UMUMKOux/exec";
 
 export default function SignUpsClient() {
-  console.log("🚀 LIVE BUILD VERSION: v3 - " + new Date().toISOString());
   const [signUps, setSignUps] = useState<SignUp[]>([]);
+  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"] | "">("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedDriver, setSelectedDriver] = useState("");
+  const [activityDescription, setActivityDescription] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [extraSpots, setExtraSpots] = useState(0);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // Fetch signups
+  const fetchSignups = () => {
+    fetch(JSON_URL + "?t=" + Date.now(), { cache: "no-store" })
+      .then((res) => res.json())
+      .then((rows: RawSignUpRow[]) => {
+        const parsed = rows
+          .map((row): SignUp | null => {
+            const slotTypeRaw = row["Slot Type"]?.trim();
+            if (
+              ![
+                "Food Prep + Grill",
+                "Driver",
+                "Rider",
+                "Activity",
+                "I have a tent",
+              ].includes(slotTypeRaw)
+            )
+              return null;
+
+            return {
+              timestamp: row["Timestamp"]?.trim(),
+              name:
+                slotTypeRaw === "Activity" && row.activityDescription
+                  ? `${row["Name"]?.trim()} — ${row.activityDescription?.trim()}`
+                  : row["Name"]?.trim(),
+              slotType: slotTypeRaw as SignUp["slotType"],
+              time: row["Time"]?.trim(),
+              phoneNumber: row.PhoneNumber || undefined,
+              extraSpots: row.ExtraSpots ? parseInt(row.ExtraSpots) : undefined,
+              driver: row.preferredDriver || undefined,
+            };
+          })
+          .filter((entry): entry is SignUp => entry !== null);
+
+        setSignUps(parsed);
+      });
+  };
 
   useEffect(() => {
-  fetch(JSON_URL + "?t=" + Date.now(), { cache: "no-store" })
-    .then((res) => res.json())
-    .then((rows: RawSignUpRow[]) => {
-      const parsed: SignUp[] = rows
-        .map((row): SignUp | null => {
-          const slotTypeRaw = row["Slot Type"]?.trim();
+    fetchSignups();
+  }, []);
 
-          // Normalize capitalization consistently
-          let normalizedSlotType: SignUp["slotType"] | null = null;
-          switch (slotTypeRaw) {
-            case "Food Prep + Grill":
-              normalizedSlotType = "Food Prep + Grill";
-              break;
-            case "Driver":
-              normalizedSlotType = "Driver";
-              break;
-            case "Rider":
-              normalizedSlotType = "Rider";
-              break;
-            case "Activity":
-              normalizedSlotType = "Activity";
-              break;
-            case "I have a tent":
-              normalizedSlotType = "I have a tent";
-              break;
-            default:
-              console.warn("Unmatched Slot Type:", slotTypeRaw);
-              normalizedSlotType = null;
-          }
+  // Submit handler (instant refresh)
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
 
-          if (!normalizedSlotType) return null;
-
-          const trimmedTime = row["Time"]?.trim() || "";
-          const name = row["Name"]?.trim();
-          const activityDesc = row["activityDescription"]?.trim();
-
-          return {
-            timestamp: row["Timestamp"]?.trim(),
-            name:
-              normalizedSlotType === "Activity" && activityDesc
-                ? `${name} — ${activityDesc}`
-                : name,
-            slotType: normalizedSlotType,
-            time: trimmedTime,
-            phoneNumber: row.PhoneNumber || undefined,
-            extraSpots: row.ExtraSpots ? parseInt(row.ExtraSpots) : undefined,
-            driver: row.preferredDriver || undefined,
-          };
-        })
-        .filter((entry): entry is SignUp => entry !== null);
-
-      console.log("Parsed signups:", parsed); // debug log
-      setSignUps(parsed);
+    fetch(JSON_URL, {
+      method: "POST",
+      body: new FormData(form),
+    }).then(() => {
+      setSuccessMessage("✅ Thanks for signing up! Your entry will appear in a few seconds.");
+      setTimeout(() => setSuccessMessage(""), 6000); // Hide message after 6s
+      setTimeout(fetchSignups, 200); // Give Google Sheets time to update before re-fetch
+      form.reset();
+      setSelectedSlotType("");
+      setSelectedTime("");
+      setSelectedDriver("");
     });
-}, []);
+  };
 
-
-
-  // === Group by slotType and time (for Grill/DJ/Activity only) ===
+  // Group by slot type & time
   const groupedByType: Record<SignUp["slotType"], Record<string, string[]>> = {
     "Food Prep + Grill": {},
     Activity: {},
@@ -121,86 +128,38 @@ export default function SignUpsClient() {
     Rider: {},
     "I have a tent": {},
   };
-
-  const allSlotMaps = {
-    "Food Prep + Grill": GRILL_SLOTS,
-    Activity: ACTIVITY_SLOTS,
-  };
-
+  const allSlotMaps = { "Food Prep + Grill": GRILL_SLOTS, Activity: ACTIVITY_SLOTS };
   for (const type in allSlotMaps) {
     for (const key in allSlotMaps[type as keyof typeof allSlotMaps]) {
       groupedByType[type as keyof typeof allSlotMaps][key] = [];
     }
   }
-for (const s of signUps) {
-  // Check if slotType exists in groupedByType
-  if (!groupedByType[s.slotType]) {
-    console.warn("❌ NO MATCH SLOT TYPE:", s.slotType);
-    continue; // skip to the next signup
+  for (const s of signUps) {
+    if (groupedByType[s.slotType] && groupedByType[s.slotType][s.time] !== undefined) {
+      groupedByType[s.slotType][s.time].push(s.name);
+    }
   }
 
-  // Check if time exists within that slotType
-  if (!(s.time in groupedByType[s.slotType])) {
-    console.warn("❌ NO MATCH TIME:", s.time, "for slotType:", s.slotType);
-    continue;
-  }
-
-  // If both match, push the name
-  console.log("✅ MATCHED:", s.slotType, s.time, "→", s.name);
-  groupedByType[s.slotType][s.time].push(s.name);
-}
-
-
-  // === Carpool Logic ===
-  type CarpoolSlot = {
-    time: string;
-    cars: {
-      driver: string | null;
-      riders: string[];
-    }[];
-  };
-
-  function buildCarpool(signUps: SignUp[]): CarpoolSlot[] {
-    const carpoolSlots: CarpoolSlot[] = [];
-
-    ["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].forEach(
-      (time) => {
-        const riders = signUps.filter((s) => s.slotType === "Rider" && s.time === time).map((s) => s.name);
-        const drivers = signUps.filter((s) => s.slotType === "Driver" && s.time === time).map((s) => s.name);
-
-        const carCount = Math.max(Math.ceil(riders.length / 4), drivers.length);
-        const cars: CarpoolSlot["cars"] = [];
-
-        for (let i = 0; i < carCount; i++) {
-          const driver = drivers[i] || null;
-          const ridersForCar = riders.slice(i * 4, (i + 1) * 4);
-          cars.push({ driver, riders: ridersForCar });
-        }
-
-        carpoolSlots.push({ time, cars });
-      }
-    );
-
-    return carpoolSlots;
-  }
-
-  const carpoolGroups = buildCarpool(signUps);
-  const [selectedSlotType, setSelectedSlotType] = useState<SignUp["slotType"] | "">("");
-  const [activityDescription, setActivityDescription] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [selectedDriver, setSelectedDriver] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [extraSpots, setExtraSpots] = useState(0);
+  // Carpool builder
+  type CarpoolSlot = { time: string; cars: { driver: string | null; riders: string[] }[] };
+  const carpoolGroups: CarpoolSlot[] = ["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].map((time) => {
+    const riders = signUps.filter((s) => s.slotType === "Rider" && s.time === time).map((s) => s.name);
+    const drivers = signUps.filter((s) => s.slotType === "Driver" && s.time === time).map((s) => s.name);
+    const carCount = Math.max(Math.ceil(riders.length / 4), drivers.length);
+    const cars = Array.from({ length: carCount }, (_, i) => ({
+      driver: drivers[i] || null,
+      riders: riders.slice(i * 4, (i + 1) * 4),
+    }));
+    return { time, cars };
+  });
 
   // Render helper
-  function renderColumn(slotMap: SlotMap, filled: Record<string, string[]>, heading: string) {
-    // Group slots by day
+  const renderColumn = (slotMap: SlotMap, filled: Record<string, string[]>, heading: string) => {
     const groupedByDay: Record<string, [string, SlotEntry][]> = {};
     for (const [key, entry] of Object.entries(slotMap)) {
       if (!groupedByDay[entry.day]) groupedByDay[entry.day] = [];
       groupedByDay[entry.day].push([key, entry]);
     }
-
     return (
       <div className="signup-column">
         <h2>{heading}</h2>
@@ -217,7 +176,7 @@ for (const s of signUps) {
         ))}
       </div>
     );
-  }
+  };
 
   return (
     <main className="site-container">
@@ -226,17 +185,15 @@ for (const s of signUps) {
           Sign up for something helpful, or burdensome..
         </h2>
 
-        {/* === SIGN-UP FORM === */}
-        <form
-          action={JSON_URL}
-          method="POST"
-          target="hidden_iframe"
-          onSubmit={() => {
-            alert("Thanks for signing up! The page will refresh now.");
-            setTimeout(() => window.location.reload(), 500);
-          }}
-          style={{ marginBottom: "3rem" }}
-        >
+        {/* Success message */}
+        {successMessage && (
+          <p style={{ color: "green", fontWeight: "bold", marginBottom: "1rem" }}>
+            {successMessage}
+          </p>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} style={{ marginBottom: "3rem" }}>
           <input type="hidden" name="activityDescription" value={activityDescription} />
           <input type="hidden" name="phoneNumber" value={phoneNumber} />
           <input type="hidden" name="extraSpots" value={extraSpots.toString()} />
@@ -262,6 +219,7 @@ for (const s of signUps) {
               <option value="I have a tent">I have a tent</option>
             </select>
           </label>
+
           {selectedSlotType === "Activity" && (
             <label>
               <p>Describe the activity you wanna lead us in:</p>
@@ -287,7 +245,7 @@ for (const s of signUps) {
                 />
               </label>
               <label>
-                <p>How many extra spots in your tent??</p>
+                <p>How many extra spots in your tent?</p>
                 <input
                   type="number"
                   name="extraSpotsInput"
@@ -300,34 +258,7 @@ for (const s of signUps) {
             </>
           )}
 
-          {selectedSlotType === "Driver" && (
-  <>
-    <label>
-      <p>Your phone number:</p>
-      <input
-        type="tel"
-        name="driverPhoneNumber"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        required
-      />
-    </label>
-    <label>
-      <p>How many extra seats in your car?</p>
-      <input
-        type="number"
-        name="driverExtraSeats"
-        value={extraSpots}
-        onChange={(e) => setExtraSpots(Number(e.target.value))}
-        min={0}
-        required
-      />
-    </label>
-  </>
-)}
-
-
-          {/* Hide time dropdown for tents */}
+          {/* Time dropdown */}
           {selectedSlotType !== "I have a tent" && (
             <label>
               <p>Time:</p>
@@ -337,12 +268,12 @@ for (const s of signUps) {
                 value={selectedTime}
                 onChange={(e) => {
                   setSelectedTime(e.target.value);
-                  setSelectedDriver(""); // reset driver when time changes
+                  setSelectedDriver("");
                 }}
               >
                 <option value="">-- Select a Time Slot --</option>
                 {Object.entries(
-                  selectedSlotType ===  "Food Prep + Grill"
+                  selectedSlotType === "Food Prep + Grill"
                     ? GRILL_SLOTS
                     : selectedSlotType === "Activity"
                     ? ACTIVITY_SLOTS
@@ -363,6 +294,7 @@ for (const s of signUps) {
             </label>
           )}
 
+          {/* Rider driver selection */}
           {selectedSlotType === "Rider" && selectedTime && (
             <label>
               <p>Driver of Choice:</p>
@@ -374,84 +306,59 @@ for (const s of signUps) {
               >
                 <option value="">-- Select a Driver --</option>
                 {signUps
-  .filter((s) => s.slotType === "Driver" && s.time === selectedTime)
-  .map((driver, index) => {
-    const ridersForDriver = signUps.filter(
-      (s) => s.slotType === "Rider" && s.time === selectedTime && s.driver === driver.name
-    ).length;
-
-    const availableSeats = (driver.extraSpots || 0) - ridersForDriver;
-
-    return (
-      <option key={index} value={driver.name} disabled={availableSeats <= 0}>
-        {driver.name} ({availableSeats > 0 ? `${availableSeats} seats left` : "Full"})
-      </option>
-    );
-  })}
+                  .filter((s) => s.slotType === "Driver" && s.time === selectedTime)
+                  .map((driver, index) => {
+                    const ridersForDriver = signUps.filter(
+                      (s) => s.slotType === "Rider" && s.time === selectedTime && s.driver === driver.name
+                    ).length;
+                    const availableSeats = (driver.extraSpots || 0) - ridersForDriver;
+                    return (
+                      <option key={index} value={driver.name} disabled={availableSeats <= 0}>
+                        {driver.name} ({availableSeats > 0 ? `${availableSeats} seats left` : "Full"})
+                      </option>
+                    );
+                  })}
               </select>
               <input type="hidden" name="preferredDriver" value={selectedDriver} />
             </label>
           )}
 
           <br />
-          <br />
           <button type="submit">Sign Up</button>
-          <iframe name="hidden_iframe" style={{ display: "none" }}></iframe>
         </form>
 
-
-<div className="dual-column">
-          {/* Carpool + Tents Column */}
+        {/* Carpool & Tents */}
+        <div className="dual-column">
           <div className="signup-column">
             <h2>Carpool</h2>
-            {["from_nyc_fri", "from_dc_fri", "from_nyc_sat", "from_dc_sat", "to_nyc_mon", "to_dc_mon"].map(
-              (key) => {
-                const group = carpoolGroups.find((g) => g.time === key);
-                if (!group) return null;
-
-                const labelMap: Record<string, string> = {
-                  from_nyc_fri: "Friday – Leave from NYC",
-                  from_dc_fri: "Friday – Leave from DC",
-                  from_nyc_sat: "Saturday – Leave from NYC",
-                  from_dc_sat: "Saturday – Leave from DC",
-                  to_nyc_mon: "Monday – Return to NYC",
-                  to_dc_mon: "Monday – Return to DC",
-                };
-
-                return (
-                  <div key={key} className="signup-day">
-                    <h3 style={{ marginBottom: "0.5rem" }}>{labelMap[key]}</h3>
-                    {group.cars.length > 0 ? (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                        {group.cars.map((car, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              padding: "0.5rem 1rem",
-                              background: "rgba(255,255,255,0.1)",
-                              borderRadius: "8px",
-                            }}
-                          >
-                            <strong>Car {index + 1}</strong>
-                            <div>
-                              <strong>Driver:</strong> {car.driver || "—"}
-                            </div>
-                            <div>
-                              <strong>Riders:</strong> {car.riders.length > 0 ? car.riders.join(", ") : "—"}
-                            </div>
-                          </div>
-                        ))}
+            {carpoolGroups.map((group) => {
+              const labelMap: Record<string, string> = {
+                from_nyc_fri: "Friday – Leave from NYC",
+                from_dc_fri: "Friday – Leave from DC",
+                from_nyc_sat: "Saturday – Leave from NYC",
+                from_dc_sat: "Saturday – Leave from DC",
+                to_nyc_mon: "Monday – Return to NYC",
+                to_dc_mon: "Monday – Return to DC",
+              };
+              return (
+                <div key={group.time} className="signup-day">
+                  <h3>{labelMap[group.time]}</h3>
+                  {group.cars.length > 0 ? (
+                    group.cars.map((car, index) => (
+                      <div key={index}>
+                        <strong>Car {index + 1}</strong>
+                        <div>Driver: {car.driver || "—"}</div>
+                        <div>Riders: {car.riders.length > 0 ? car.riders.join(", ") : "—"}</div>
                       </div>
-                    ) : (
-                      <p style={{ fontStyle: "italic" }}>No cars yet for this time.</p>
-                    )}
-                  </div>
-                );
-              }
-            )}
+                    ))
+                  ) : (
+                    <p>No cars yet for this time.</p>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* Tents Column */}
           <div className="signup-column">
             <h2>Tents</h2>
             {signUps
@@ -464,13 +371,11 @@ for (const s of signUps) {
           </div>
         </div>
 
-        {/* === SIGNUP LISTS === */}
+        {/* Lists */}
         <div className="dual-column">
           {renderColumn(ACTIVITY_SLOTS, groupedByType.Activity, "Activities")}
           {renderColumn(GRILL_SLOTS, groupedByType["Food Prep + Grill"], "Food Prep + Grill")}
         </div>
-
-        
       </div>
     </main>
   );
